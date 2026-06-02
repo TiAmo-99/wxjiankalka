@@ -1,0 +1,170 @@
+{
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationBarTitleText": "今日",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/plan/plan",
+      "style": {
+        "navigationBarTitleText": "计划",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/register/register",
+      "style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "个人资料"
+      }
+    },
+    {
+      "path": "pages/email-settings/email-settings",
+      "style": {
+        "navigationBarTitleText": "邮箱提醒设置"
+      }
+    },
+    {
+      "path": "pages/permission-apply/permission-apply",
+      "style": {
+        "navigationBarTitleText": "权限申请",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/toolbox/toolbox",
+      "style": {
+        "navigationBarTitleText": "工具箱",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-bluetooth/charger-bluetooth",
+      "style": {
+        "navigationBarTitleText": "充电桩蓝牙调试"
+      }
+    },
+    {
+      "path": "pages/toolbox/ops-platform/ops-platform",
+      "style": {
+        "navigationBarTitleText": "运维平台调试"
+      }
+    },
+    {
+      "path": "pages/toolbox/calculator/calculator",
+      "style": {
+        "navigationBarTitleText": "计算器"
+      }
+    },
+    {
+      "path": "pages/toolbox/qrcode/qrcode",
+      "style": {
+        "navigationBarTitleText": "二维码"
+      }
+    },
+    {
+      "path": "pages/report-history/report-history",
+      "style": {
+        "navigationBarTitleText": "学习记录"
+      }
+    },
+    {
+      "path": "pages/report/report",
+      "style": {
+        "navigationBarTitleText": "学习记录"
+      }
+    },
+    {
+      "path": "pages/vocab/vocab",
+      "style": {
+        "navigationBarTitleText": "英语单词"
+      }
+    },
+    {
+      "path": "pages/memos/memos",
+      "style": {
+        "navigationBarTitleText": "备忘录"
+      }
+    },
+    {
+      "path": "pages/memos/memo-edit",
+      "style": {
+        "navigationBarTitleText": "编辑备忘录"
+      }
+    },
+    {
+      "path": "pages/plan-add/plan-add",
+      "style": {
+        "navigationBarTitleText": "新增学习任务"
+      }
+    },
+    {
+      "path": "pages/task-study/task-study",
+      "style": {
+        "navigationBarTitleText": "学习记录",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "考研学习记录",
+    "navigationBarBackgroundColor": "#3f60ea",
+    "backgroundColor": "#f4f6ff",
+    "backgroundColorTop": "#f4f6ff",
+    "backgroundColorBottom": "#f4f6ff"
+  },
+  "tabBar": {
+    "color": "#8a94a6",
+    "selectedColor": "#3f60ea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/plan/plan",
+        "text": "计划",
+        "iconPath": "static/tab/plan.png",
+        "selectedIconPath": "static/tab/plan-active.png"
+      },
+      {
+        "pagePath": "pages/home/home",
+        "text": "今日",
+        "iconPath": "static/tab/report.png",
+        "selectedIconPath": "static/tab/report-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "static/tab/mine.png",
+        "selectedIconPath": "static/tab/mine-active.png"
+      }
+    ]
+  }
+}

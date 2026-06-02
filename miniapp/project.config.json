@@ -1,0 +1,16 @@
+{
+  "description": "微信小程序本地工程配置（uni-app 编译时会合并）",
+  "compileType": "miniprogram",
+  "appid": "wx7ee2768e43e53c3e",
+  "projectname": "考研学习记录",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": false,
+    "enhance": false,
+    "minifyWXML": false
+  },
+  "libVersion": "3.3.5",
+  "condition": {}
+}

@@ -1,0 +1,27 @@
+{
+    "name" : "考研学习记录",
+    "appid" : "__UNI__JANKALKA",
+    "description" : "考研学员学习计划查看与每日学习上报",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
+    "vueVersion" : "3",
+    "locale" : "zh-Hans",
+    "mp-weixin" : {
+        "appid" : "wx7ee2768e43e53c3e",
+        "setting" : {
+            "urlCheck" : false,
+            "es6" : true,
+            "postcss" : true,
+            "minified" : false,
+            "enhance" : false
+        },
+        "usingComponents" : true,
+        "optimization" : {
+            "subPackages" : true
+        }
+    },
+    "uniStatistics" : {
+        "enable" : false
+    }
+}
