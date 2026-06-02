@@ -1,120 +1,163 @@
 # miniapp — 微信小程序（uni-app + Vue 3）
 
-本目录为 **uni-app** 工程，使用 **Vue 3** 编写，通过 **HBuilder X** 编译发布到微信小程序。
+本目录为 **uni-app** 工程，使用 **Vue 3 组合式 API**，通过 **HBuilderX** 编译发布到微信小程序。
 
-## 目录说明
+---
+
+## Tab 与页面结构
+
+### 底部 Tab（3 个）
+
+| Tab | 路径 | 说明 |
+|-----|------|------|
+| 计划 | `pages/plan/plan` | 今日可上报；本周/全部只读；月历选日 |
+| 今日 | `pages/home/home` | **启动首页**：进度、鼓励语、单词预览 |
+| 我的 | `pages/mine/mine` | 登录、学习数据、功能入口 |
+
+### 子页面一览
 
 ```
-miniapp/
-├── pages/           # 页面
-│   ├── home/        # 今日（启动首页）：提示、进度、任务速览
-│   ├── plan/        # 计划：今日可上报；本周/全部只读
-│   ├── mine/        # 我的：登录、学习统计
-│   ├── task-study/  # 学习记录 + 计时器
-│   └── report/      # 已废弃，自动跳转今日
-├── static/          # 静态资源（Tab 图标等）
-├── components/      # 公共组件（按需添加）
-├── utils/           # 工具（request、auth）
-├── config/          # 环境配置（API 地址）
-├── App.vue
-├── main.js
-├── manifest.json    # 应用配置（含 mp-weixin AppID）
-├── pages.json       # 页面路由与 TabBar
-└── uni.scss         # 全局样式变量
+pages/
+├── home/                 # 今日 Tab
+├── plan/                 # 计划 Tab
+├── plan-add/             # 新增学习任务（学员自定义）
+├── task-study/           # 学习记录 / 计时上报
+├── report-history/       # 学习历史上报列表
+├── report/               # 兼容跳转 → report-history
+├── mine/                 # 我的 Tab
+├── register/             # 注册
+├── profile/              # 个人资料
+├── email-settings/       # 邮箱提醒设置
+├── permission-apply/     # 权限申请 / L10 审核他人申请
+├── vocab/                # 英语单词学习
+├── memos/
+│   ├── memos             # 备忘录列表
+│   └── memo-edit         # 新建/编辑备忘录
+└── toolbox/
+    ├── toolbox           # 工具箱入口
+    ├── calculator        # 计算器（L0+）
+    ├── qrcode            # 二维码扫码/生成（L1+）
+    ├── ops-platform      # 运维平台调试（L3+）
+    └── charger-bluetooth # 充电桩蓝牙（开发中）
 ```
 
-## HBuilder X 使用步骤
+---
 
-1. 打开 **HBuilder X** → 文件 → 导入 → 从本地目录导入，选择本 `miniapp` 目录。
-2. 在 `manifest.json` → **微信小程序配置** 中填写你的 **AppID**（测试可先使用测试号）。
-3. 在 `config/index.js` 中配置后端 `baseUrl`（开发环境默认 `http://localhost:3000/api/v1`）。
-4. 菜单 **运行** → **运行到小程序模拟器** → **微信开发者工具**（需已安装并登录微信开发者工具）。
-5. 正式发布：**发行** → **小程序-微信**，再用微信开发者工具上传审核。
+## 「我的」页菜单结构
 
-## 微信开发者工具注意
+| 区块 | 顺序 | 入口 |
+|------|------|------|
+| **学习** | 1 | 新增学习任务、查看学习计划、学习记录 |
+| **工具** | 2 | 备忘录、工具箱 |
+| **账户**（需登录） | 3 | 个人资料、界面风格、权限申请、邮箱提醒设置 |
 
-- 本地调试若请求 `localhost`，需在开发者工具中勾选「不校验合法域名」。
-- 体验版/正式版须在公众平台配置 **request 合法域名** 为生产 API 域名。
+---
 
-## 备忘录（需登录）
+## 权限等级说明
 
-路径：`pages/memos/memos`（我的 → 工具 → 备忘录）
+| 等级 | 能力 |
+|------|------|
+| L0 | 计算器 |
+| L1+ | 二维码（扫码、生成） |
+| L3+ | 工具箱运维调试（直连 cms） |
+| L10 | **最终管理员**：在「权限申请」页审核他人待审申请 |
 
-- 云端增删改查，按账号隔离
-- 服务端表 `memos`，部署后执行 `npm run db:migrate`
+申请更高权限：**我的 → 账户 → 权限申请**。
+
+---
+
+## 备忘录
+
+- 路径：`pages/memos/memos`（**我的 → 工具 → 备忘录**）
+- 需登录；数据按账号隔离，云端增删改查
+- 支持搜索、下拉刷新、分页加载
+
+---
 
 ## 工具箱
 
 路径：`pages/toolbox/toolbox`
 
-| 工具 | 权限 | 说明 |
-|------|------|------|
-| 计算器 | L0（全员） | 四则运算 |
-| 二维码 | L1+ | 扫码解码、文字生成二维码 |
-| 充电桩蓝牙调试 | L3+ | 开发中 |
-| 运维平台调试 | L3+ | 直连 cms 查询充电站/桩 |
+| 工具 | 最低权限 | 说明 |
+|------|----------|------|
+| 计算器 | L0 | 四则运算 |
+| 二维码 | L1 | 扫码解码、文字生成二维码图 |
+| 运维平台调试 | L3 | 直连 `https://cms.iesztn.com` 查充电站/桩 |
+| 充电桩蓝牙 | L3 | 占位，开发中 |
 
-## 工具箱 · 运维平台调试
+运维平台需在小程序后台 request 合法域名添加：`cms.iesztn.com`（本地可勾选不校验合法域名）。
 
-路径：`pages/toolbox/ops-platform`（需权限 **L3+**）
+---
 
-- 直连 `https://cms.iesztn.com`（与 jzywApp 相同 `/chgyw/*` 接口）
-- 顶部输入运维 **手机号、密码**，自动写入本地存储（`ops_platform_login_id` / `ops_platform_password`）
-- 功能：充电站列表、站下充电桩列表、按桩编号查询桩详情与告警摘要
-
-**微信小程序后台** → 开发管理 → 开发设置 → **服务器域名** → request 合法域名增加：
-
-`https://cms.iesztn.com`
-
-本地开发可在开发者工具勾选「不校验合法域名」；正式版必须配置。
-
-## 与后端联调
-
-- 登录：`utils/auth.js` → `POST /auth/wx-login`
-- 计划：`pages/plan/plan.vue` → `/plans/today|week|all`
-- 学习记录/计时：`pages/task-study/task-study.vue` → `POST /reports`
-- 学习记录列表：`pages/report-history/report-history.vue`
-- 旧路由 `pages/report/report.vue` → 自动跳转学习记录列表
-
-### 环境开关（`config/index.js`）
+## 环境配置（`config/index.js`）
 
 | 模式 | 说明 |
 |------|------|
-| **prod（默认）** | 请求 `https://server.jiankalka.cn/api/v1`，微信登录为真实账号 |
-| **dev（需手动开启）** | Mock 数据，登录显示「演示学员」；控制台执行 `uni.setStorageSync('api_env_override','dev')` 后重新编译 |
+| **prod（默认）** | `https://server.jiankalka.cn/api/v1`，真实微信登录 |
+| **dev（Mock）** | 控制台执行 `uni.setStorageSync('api_env_override','dev')` 后重新编译；演示数据、昵称「演示学员」 |
 
-若曾误开 Mock，请 **退出登录**，执行 `uni.removeStorageSync('api_env_override')`，清缓存后重新运行。
+恢复线上：`uni.removeStorageSync('api_env_override')` 并退出登录后重新编译。
 
-## 常见运行报错排查
+---
 
-### `wx is not defined` / `afterPackageCommonEvaluation` / `setPageTypeById`
+## HBuilderX 使用步骤
 
-多为 **开发者工具基础库过高** 或 **打开了错误目录**。
+1. **文件 → 导入** → 选择本 `miniapp` 目录  
+2. `manifest.json` → 微信小程序配置 → 填写 **AppID**  
+3. **运行 → 运行到小程序模拟器 → 微信开发者工具**  
+4. 正式发布：**发行 → 小程序-微信** → 微信开发者工具上传审核  
 
-1. **详情 → 本地设置 → 调试基础库**：选 **3.3.5** 或 **3.4.x 稳定版**，不要选 **3.15.x** 灰度版（日志里 `lib: 3.15.2` 即此问题）。
-2. 导入目录必须是编译产物：**`miniapp/unpackage/dist/dev/mp-weixin`**（该目录下应有 `app.json`）。**不要**在 `project.config.json` 里配置 `miniprogramRoot`。
-3. HBuilder：**运行 → 运行到小程序模拟器 → 微信**（不要只开开发者工具不编译）。
-4. **工具 → 清缓存 → 全部清除**；删除 `miniapp/unpackage` 后重新运行编译。
-5. `manifest.json` 保持 `enhance: false`（已配置）。
+> 开发者工具请打开编译目录 **`unpackage/dist/dev/mp-weixin`**（含 `app.json`），不要直接以源码根目录为小程序根目录。
 
-### `pageframeLoader is not defined`（渲染层）
+---
 
-1. 已在 `manifest.json` 关闭 **增强编译**（`enhance: false`），修改后需 **重新运行编译**。
-2. 微信开发者工具：**详情 → 本地设置** → 调试基础库选 **3.3.x 稳定版**（勿用灰度）。
-3. **工具 → 清缓存 → 全部清除**，并删除项目下 `unpackage` 目录后，在 HBuilder X 重新「运行到微信」。
-4. 确认导入/打开目录为 **`unpackage/dist/dev/mp-weixin`**，不要直接打开 `miniapp` 源码根目录。
+## 与后端主要接口
 
-### `document.querySelector / getElementById is not a function`（VMxx）
+| 功能 | 接口 |
+|------|------|
+| 登录/注册 | `POST /auth/wx-login`、`POST /auth/wx-register` |
+| 当前用户 | `GET /auth/me` |
+| 计划 | `GET /plans/today|week`、`GET /plans/items` 等 |
+| 上报 | `POST /reports`、`GET /reports` |
+| 统计 | `GET /stats/summary` |
+| 词库 | `GET /vocab/preview`、`GET /vocab/set` |
+| 备忘录 | `GET/POST /memos`、`PATCH/DELETE /memos/:id` |
+| 权限申请 | `POST/GET /auth/permission-requests` |
+| L10 审核 | `GET /auth/permission-requests/review-queue`、`PATCH .../:id/review` |
 
-多为 **开发者工具自身调试页** 的报错，不是业务 Vue 代码（小程序没有完整 DOM）。若模拟器白屏，优先处理 `pageframeLoader`；可忽略 VM 编号脚本中的 DOM 报错。
+约定见 [docs/api-convention.md](../docs/api-convention.md)。
 
-### `Failed to load resource: 500`
+---
 
-1. 检查 Tab 图标是否存在：`static/tab/*.png`（81×81），重新编译后 `mp-weixin/static/tab` 下应有同名文件。缺失时执行：`pip install pillow && python scripts/download-tab-icons.py`（图标来自 [Icons8](https://icons8.com)）。
-2. 若控制台是请求 `localhost` API 返回 500，属后端未启动，与页面渲染无关；本地开发可保持 `urlCheck: false`。
+## 主题与样式
+
+- 全局主题：`utils/theme.js`（经典蓝、女神粉等）  
+- 页面通过 `<theme-page-meta />` 与 CSS 变量 `--theme-*` 适配导航栏与 TabBar  
+- 公共按钮样式：`styles/buttons.scss`  
+
+---
+
+## 常见运行问题
+
+### `wx is not defined` / 白屏
+
+1. 调试基础库选 **3.3.x / 3.4.x 稳定版**，避免灰度过新版本  
+2. 导入目录为 **`unpackage/dist/dev/mp-weixin`**  
+3. HBuilder 重新「运行到微信」；工具 → 清缓存；可删除 `unpackage` 后重编译  
+4. `manifest.json` 保持 `enhance: false`  
+
+### `placeholder` 导致 WXML 编译错误
+
+`textarea` / `input` 的 `placeholder` **不要写真实换行**；多行提示请绑定到 `:placeholder` 变量（单行字符串）。
+
+### `invalid app.json permission scope.*`
+
+已在 `manifest.json` 移除过时 `permission` 配置；相机/相册权限在使用时由 API 触发。
+
+---
 
 ## 技术栈
 
-- uni-app（Vue 3，`vueVersion: 3`）
-- 组合式 API（`<script setup>`）
-- SCSS + `uni.scss` 变量
+- uni-app（Vue 3，`vueVersion: 3`）  
+- `<script setup>` + `ref` / `computed`  
+- SCSS + `uni.scss`  
