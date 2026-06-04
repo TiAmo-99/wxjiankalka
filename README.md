@@ -36,6 +36,7 @@ wxjiankalka/
 │   ├── admin-web/        # 管理后台前端
 │   ├── public/admin/     # 管理后台构建产物（npm run build:admin）
 │   └── data/             # 词库种子 JSON
+├── website/              # www.jiankalka.cn 官网（文档与后续前端工程）
 └── docs/                 # 需求、部署、接口约定等文档
 ```
 
@@ -43,6 +44,7 @@ wxjiankalka/
 |------|------|
 | [miniapp/](./miniapp/) | 学员端小程序，见 [miniapp/README.md](./miniapp/README.md) |
 | [server/](./server/) | API 与管理后台，见 [server/README.md](./server/README.md) |
+| [website/](./website/) | 个人官网（充电桩营销 + Web 工具），见 [website/README.md](./website/README.md) |
 | [docs/](./docs/) | 项目文档索引见下文 |
 
 ---
@@ -72,6 +74,8 @@ wxjiankalka/
 | [docs/vocab.md](./docs/vocab.md) | 词库导入命令与 API |
 | [docs/email-remind.md](./docs/email-remind.md) | 邮箱定时提醒配置 |
 | [docs/wechat-notify.md](./docs/wechat-notify.md) | 微信订阅消息（规划/二期） |
+| [website/docs/独立站-架构与开发思路.md](./website/docs/独立站-架构与开发思路.md) | **www** 独立站：语言、架构、前后端是否分离 |
+| [website/docs/个人官网-设计方案.md](./website/docs/个人官网-设计方案.md) | **www** 页面规划与产品内容（可不绑 server） |
 | [server/UPLOAD.md](./server/UPLOAD.md) | 服务端打包上传清单 |
 
 ---

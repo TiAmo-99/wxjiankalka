@@ -1,0 +1,18 @@
+{
+  "id": "ac-7kw-demo",
+  "name": "7kW 交流充电桩（示例）",
+  "category": "交流",
+  "published": false,
+  "highlights": ["国标接口", "蓝牙运维调试", "支持 OTA"],
+  "specs": {
+    "额定功率": "7kW",
+    "防护等级": "IP54",
+    "通信": "蓝牙 / 4G（按型号）"
+  },
+  "images": [],
+  "relatedTools": ["charger-ble", "ops-platform"],
+  "cta": {
+    "type": "contact",
+    "label": "获取方案与报价"
+  }
+}

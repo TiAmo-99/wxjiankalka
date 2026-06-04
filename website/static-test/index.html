@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="建咖充电 — 个人官网测试页" />
+  <title>建咖充电 · 站点测试</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="header">
+    <div class="logo">⚡ 建咖充电</div>
+    <span class="badge">HTML 静态站 · 公网测试</span>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <p class="tag">www.jiankalka.cn</p>
+      <h1>网站部署成功</h1>
+      <p class="lead">
+        若你能看到本页，说明宝塔 <strong>HTML 项目</strong> 与域名解析已生效。
+        后续可将 Vue 构建产物（<code>dist/</code>）覆盖本目录。
+      </p>
+      <div class="status-card" id="statusCard">
+        <div class="status-row">
+          <span>访问时间</span>
+          <strong id="visitTime">—</strong>
+        </div>
+        <div class="status-row">
+          <span>当前地址</span>
+          <strong id="visitUrl">—</strong>
+        </div>
+        <div class="status-row">
+          <span>协议</span>
+          <strong id="visitProto">—</strong>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="#tools">查看示例区块</a>
+        <a class="btn ghost" href="https://server.jiankalka.cn/api/v1/health" target="_blank" rel="noopener">检测 API（可选）</a>
+      </div>
+    </section>
+
+    <section class="cards" id="tools">
+      <article class="card">
+        <h2>产品营销</h2>
+        <p>交流 / 直流充电桩、运维方案、案例展示 — 正式版由 Vue 页面承载。</p>
+      </article>
+      <article class="card">
+        <h2>在线工具</h2>
+        <p>计算器、二维码、参数助手等 — 可先纯前端，无需后端。</p>
+      </article>
+      <article class="card">
+        <h2>仓库结构</h2>
+        <p><code>website</code> 网页 · <code>miniapp</code> 小程序 · <code>server</code> 后端 API。</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>测试页 v1 · 建咖个人官网 · 上传目录：<code>/www/wwwroot/www.jiankalka.cn</code></p>
+  </footer>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
