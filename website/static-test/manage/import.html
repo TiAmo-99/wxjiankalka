@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>批量导入</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>批量导入学习任务</h2>
+        <p>先选择学员 → 下载模板 → 填写后上传</p>
+      </div>
+      <div class="panel">
+        <h3>选择学员</h3>
+        <div class="toolbar">
+          <select id="user-id" class="select" style="min-width:280px"></select>
+          <button type="button" class="btn btn-ghost" id="btn-refresh">刷新列表</button>
+        </div>
+        <p id="selected-tip" class="modal-meta"></p>
+      </div>
+      <div class="panel">
+        <h3>第一步：下载模板</h3>
+        <p class="modal-meta">模板仅含：日期、科目、任务内容、目标分钟</p>
+        <button type="button" class="btn btn-primary" id="btn-download">下载 Excel 模板</button>
+      </div>
+      <div class="panel">
+        <h3>第二步：上传表格</h3>
+        <div class="toolbar">
+          <input type="file" id="file" accept=".xlsx,.xls" />
+          <button type="button" class="btn btn-primary" id="btn-upload">开始导入</button>
+        </div>
+        <p id="file-name" class="modal-meta"></p>
+      </div>
+      <div id="result-panel" class="panel" hidden></div>
+    </main>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/import.js"></script>
+</body>
+</html>

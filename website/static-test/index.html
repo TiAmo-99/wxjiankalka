@@ -3,66 +3,322 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="建咖充电 — 个人官网测试页" />
-  <title>建咖充电 · 站点测试</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <meta name="description" content="简卡拉卡 JIANKALKA — 个人充电产品与技术展示站，产品效果图与技术笔记。" />
+  <title>简卡拉卡 JIANKALKA · 个人站</title>
+  <link rel="icon" href="./images/brand/logo-mark-square.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./css/style.css?v=20260606" />
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="page-bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-aurora"></div>
+    <div class="bg-noise"></div>
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+    <div class="orb orb-d"></div>
+  </div>
 
-  <header class="header">
-    <div class="logo">⚡ 建咖充电</div>
-    <span class="badge">HTML 静态站 · 公网测试</span>
-  </header>
-
-  <main class="main">
-    <section class="hero">
-      <p class="tag">www.jiankalka.cn</p>
-      <h1>网站部署成功</h1>
-      <p class="lead">
-        若你能看到本页，说明宝塔 <strong>HTML 项目</strong> 与域名解析已生效。
-        后续可将 Vue 构建产物（<code>dist/</code>）覆盖本目录。
-      </p>
-      <div class="status-card" id="statusCard">
-        <div class="status-row">
-          <span>访问时间</span>
-          <strong id="visitTime">—</strong>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top">
+        <img class="brand-logo" src="./images/brand/logo-mark-square.svg" width="40" height="40" alt="简卡拉卡 JIANKALKA" />
+        <span class="brand-text">
+          简卡拉卡
+          <small class="brand-en">JIANKALKA</small>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="页面导航">
+        <a class="site-nav-link" href="#products">产品</a>
+        <a class="site-nav-link" href="#about">关于</a>
+        <a class="site-nav-link" href="#contact">联系</a>
+        <div class="nav-dropdown" id="site-nav-dropdown">
+          <button
+            type="button"
+            class="nav-dropdown-trigger"
+            id="site-nav-dropdown-btn"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="site-nav-dropdown-menu"
+          >
+            网站导航
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="nav-dropdown-menu" id="site-nav-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="https://www.ieslab.com.cn/" target="_blank" rel="noopener noreferrer">积成电子官网</a>
+            <a role="menuitem" href="https://www.iesztn.com/" target="_blank" rel="noopener noreferrer">积成智通官网</a>
+            <a role="menuitem" href="https://steve.jiankalka.cn/" target="_blank" rel="noopener noreferrer">Steve OCPP 测试平台</a>
+            <a role="menuitem" href="./manage/login.html">微信小程序管理后台</a>
+          </div>
         </div>
-        <div class="status-row">
-          <span>当前地址</span>
-          <strong id="visitUrl">—</strong>
-        </div>
-        <div class="status-row">
-          <span>协议</span>
-          <strong id="visitProto">—</strong>
+      </nav>
+      <div class="header-actions">
+        <div class="nav-dropdown header-dropdown" id="toolbox-dropdown">
+          <button
+            type="button"
+            class="btn btn-header nav-dropdown-trigger-btn"
+            id="toolbox-dropdown-btn"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="toolbox-dropdown-menu"
+          >
+            工具箱
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="nav-dropdown-menu nav-dropdown-menu--right" id="toolbox-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="./tools/qrcode.html">二维码生成</a>
+            <a role="menuitem" href="./tools/json.html">JSON 数据处理</a>
+            <a role="menuitem" href="./tools/convert.html">数据转换及长度计算</a>
+          </div>
         </div>
       </div>
-      <div class="actions">
-        <a class="btn primary" href="#tools">查看示例区块</a>
-        <a class="btn ghost" href="https://server.jiankalka.cn/api/v1/health" target="_blank" rel="noopener">检测 API（可选）</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">PERSONAL · JIANKALKA</p>
+          <h1 class="hero-title">
+            <span class="line">简卡拉卡</span>
+            <span class="line accent">充电产品与技术笔记</span>
+          </h1>
+          <p class="hero-lead">
+            个人站点，整理典型机型效果图、方案要点与工具说明，供技术交流参考。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="#products">浏览产品</a>
+            <a class="btn btn-ghost btn-lg" href="#about">关于本站</a>
+          </div>
+          <p class="hero-footnote">
+            非公司官方网站。本人就职于
+            <a class="inline-link" href="https://www.iesztn.com/" target="_blank" rel="noopener">山东积成智通新能源有限公司</a>，
+            商务与售后请以
+            <a class="inline-link" href="https://www.iesztn.com/" target="_blank" rel="noopener">iesztn.com</a>
+            为准。
+          </p>
+        </div>
+        <div class="hero-visual reveal reveal--delay" aria-hidden="true">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="hero-frame hero-frame--glow">
+            <img
+              src="./images/products/host-liquid-cool-cabinet.jpg"
+              alt="全液冷光储充放主机柜"
+              width="800"
+              height="600"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="hero-badge">全液冷 · 光储充放主机柜</div>
+        </div>
       </div>
     </section>
 
-    <section class="cards" id="tools">
-      <article class="card">
-        <h2>产品营销</h2>
-        <p>交流 / 直流充电桩、运维方案、案例展示 — 正式版由 Vue 页面承载。</p>
-      </article>
-      <article class="card">
-        <h2>在线工具</h2>
-        <p>计算器、二维码、参数助手等 — 可先纯前端，无需后端。</p>
-      </article>
-      <article class="card">
-        <h2>仓库结构</h2>
-        <p><code>website</code> 网页 · <code>miniapp</code> 小程序 · <code>server</code> 后端 API。</p>
-      </article>
+    <section class="section-products" id="products">
+      <div class="container">
+        <header class="section-header reveal">
+          <p class="section-label">PRODUCTS</p>
+          <h2>产品展示</h2>
+          <p class="section-desc">
+            日常工作中接触的典型机型效果图，按功率与形态分类，便于方案讨论与学习。
+          </p>
+        </header>
+
+        <div class="product-grid">
+          <article class="product-card product-card--featured reveal">
+            <div class="product-media">
+              <img src="./images/products/dc-240kw-truck.jpg" alt="240–400kW 重卡充电一体机" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">旗舰 · 大功率</span>
+              <h3>240–400kW 重卡充电一体机</h3>
+              <p>面向重卡、物流枢纽与港口场景，整机一体化交付，支持高功率稳定输出与长时间运行工况。</p>
+              <ul class="spec-list">
+                <li>功率至高 400kW 级</li>
+                <li>重卡 / 专用车工况优化</li>
+                <li>支持定制枪数与支付对接</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/host-liquid-cool-cabinet.jpg" alt="全液冷光储充放主机柜" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">全液冷 · 光储充</span>
+              <h3>全液冷光储充放主机柜</h3>
+              <p>液冷散热、光储充放一体，适用于大功率场站与能源协同场景。</p>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/terminal-liquid-cool.jpg" alt="液冷充电终端" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">液冷超充</span>
+              <h3>液冷超级充电终端</h3>
+              <p>液冷枪线与大电流能力，搭配群充主机构建超充场站。</p>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/dc-120-180kw.jpg" alt="120–180kW 直流一体机" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">直流一体机</span>
+              <h3>120–180kW 直流充电一体机</h3>
+              <p>社会版一体式方案，适合公共快充站、园区与商超停车场。</p>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/ac-7kw-e3.jpg" alt="7kW 个人有序交流充电桩" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">交流</span>
+              <h3>7kW 个人有序交流充电桩</h3>
+              <p>家庭与车位慢充优选，支持有序充电策略，安装灵活。</p>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/storage-charge-unit.jpg" alt="储充一体机" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">光储充</span>
+              <h3>储充一体机</h3>
+              <p>储能 + 充电融合，支持微网、削峰填谷与绿电利用。</p>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/dc-small-power.jpg" alt="小功率直流充电桩" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">小功率直流</span>
+              <h3>小功率直流充电桩</h3>
+              <p>紧凑部署，满足社区、单位内部等中小功率补能。</p>
+            </div>
+          </article>
+
+          <article class="product-card reveal">
+            <div class="product-media">
+              <img src="./images/products/eu-standard-dc.jpg" alt="欧标直流充电桩" loading="lazy" />
+            </div>
+            <div class="product-content">
+              <span class="pill">出口 · 欧标</span>
+              <h3>欧标直流充电桩</h3>
+              <p>符合欧标接口规范，面向海外项目定制交付。</p>
+            </div>
+          </article>
+        </div>
+
+        <p class="products-note">
+          上图仅为个人整理的效果参考，不构成规格承诺。采购、合作与平台接入请通过就职单位官方渠道办理。
+        </p>
+      </div>
+    </section>
+
+    <section class="section-about" id="about">
+      <div class="container about-layout">
+        <div class="about-main reveal">
+          <header class="section-header section-header--left">
+            <p class="section-label">ABOUT</p>
+            <h2>关于本站</h2>
+          </header>
+          <div class="about-body">
+            <p>
+              <strong>简卡拉卡（JIANKALKA）</strong> 是本人使用的个人标识。
+              域名 <strong>www.jiankalka.cn</strong> 用于发布充电相关笔记、资料与工具说明，
+              不代表任何机构的官方立场。
+            </p>
+            <p>
+              本站内容基于个人学习与工作经验整理，欢迎技术交流；如需了解机构产品、项目案例或办理商务，
+              请访问就职单位官网
+              <a class="inline-link" href="https://www.iesztn.com/" target="_blank" rel="noopener">www.iesztn.com</a>。
+            </p>
+            <ul class="about-tags" aria-label="本站主题">
+              <li>产品效果图</li>
+              <li>方案笔记</li>
+              <li><a href="./tools/qrcode.html">在线工具箱</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <aside class="contact-panel contact-panel--glow reveal reveal--delay" id="contact">
+          <h3 class="contact-panel-title">联系简卡拉卡</h3>
+          <p class="contact-panel-desc">个人技术交流，欢迎邮件或扫码（非官方客服）。</p>
+
+          <a class="contact-email" href="mailto:jiankalaka@qq.com">jiankalaka@qq.com</a>
+
+          <div class="contact-qr-grid">
+            <figure class="contact-qr">
+              <div class="contact-qr-img">
+                <img
+                  src="./images/personal/wx_jiankalka.jpg"
+                  alt="简卡拉卡 微信公众号二维码"
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption>
+                <strong>微信公众号</strong>
+                <span>简卡拉卡</span>
+              </figcaption>
+            </figure>
+            <figure class="contact-qr">
+              <div class="contact-qr-img">
+                <img
+                  src="./images/personal/wx2_jiankalka.jpg"
+                  alt="简卡拉卡 微信小程序二维码"
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption>
+                <strong>微信小程序</strong>
+                <span>简卡拉卡</span>
+              </figcaption>
+            </figure>
+          </div>
+        </aside>
+      </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <p>测试页 v1 · 建咖个人官网 · 上传目录：<code>/www/wwwroot/www.jiankalka.cn</code></p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img class="brand-logo brand-logo--sm" src="./images/brand/logo-mark-square.svg" width="32" height="32" alt="" />
+        <span>简卡拉卡 <em>JIANKALKA</em></span>
+      </div>
+      <p class="footer-meta">
+        <span>个人站 · www.jiankalka.cn · © <span id="year"></span></span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <span>就职于 <a href="https://www.iesztn.com/" target="_blank" rel="noopener">山东积成智通新能源有限公司</a></span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <span>非公司官网</span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <span><a href="./manage/login.html">考研管理后台</a></span>
+      </p>
+    </div>
   </footer>
 
-  <script src="./js/main.js"></script>
+  <script src="./js/dropdown.js?v=20260606"></script>
+  <script src="./js/main.js?v=20260606"></script>
 </body>
 </html>

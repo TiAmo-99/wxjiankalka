@@ -34,11 +34,22 @@ pages/
 │   ├── memos             # 备忘录列表
 │   └── memo-edit         # 新建/编辑备忘录
 └── toolbox/
-    ├── toolbox           # 工具箱入口
+    ├── toolbox           # 工具箱入口（L3+）
     ├── calculator        # 计算器（L0+）
-    ├── qrcode            # 二维码扫码/生成（L1+）
+    ├── qrcode            # 二维码（L1+）
     ├── ops-platform      # 运维平台调试（L3+）
-    └── charger-bluetooth # 充电桩蓝牙（开发中）
+    ├── charger-menu/     # 充电桩功能菜单（L3+）
+    │   ├── charger-bluetooth/  # 蓝牙连接与收发
+    │   ├── charger-monitor/    # 充电监控（SystemInfo + GunInfo）
+    │   ├── charger-params/     # 参数配置
+    │   └── charger-firmware/   # 固件升级（本机/聊天记录选 .bin）
+    ├── charger-info/     # → 重定向至 monitor
+    ├── charger-connect/  # → 重定向至 menu
+    └── charger-stub/     # 历史记录等预留
+├── login/                # 登录
+├── set-password/         # 设置密码
+├── legal/                # 用户协议、隐私政策
+└── member-tasks/         # 学员任务查看（管理用途）
 ```
 
 ---
@@ -83,7 +94,23 @@ pages/
 | 计算器 | L0 | 四则运算 |
 | 二维码 | L1 | 扫码解码、文字生成二维码图 |
 | 运维平台调试 | L3 | 直连 `https://cms.iesztn.com` 查充电站/桩 |
-| 充电桩蓝牙 | L3 | 占位，开发中 |
+| 充电桩蓝牙 | L3 | CCU621 BLE：连接、监控、参数、固件升级 |
+
+### 充电桩蓝牙（L3+）
+
+入口：**我的 → 工具箱 → 充电桩蓝牙**
+
+| 子功能 | 路径 | 说明 |
+|--------|------|------|
+| 蓝牙连接与收发 | `charger-bluetooth` | 扫描/连接、JSON·文本·Hex 调试 |
+| 充电监控 | `charger-monitor` | 系统信息、枪实时数据、启停充电 |
+| 参数配置 | `charger-params` | 七类参数查询/修改、初始化/重启 |
+| 固件升级 | `charger-firmware` | 本机或聊天记录选 `.bin`，BLE 分片上传 |
+
+协议与联调见 [docs/充电桩蓝牙调试-实施方案.md](../docs/充电桩蓝牙调试-实施方案.md)。  
+隐私与审核见 [docs/微信小程序审核-隐私合规.md](../docs/微信小程序审核-隐私合规.md)。
+
+**微信后台需配置**：蓝牙、位置（Android 扫描）、选中的文件（固件升级）；`requiredPrivateInfos` 仅可声明定位类 API，选文件在《用户隐私保护指引》中说明即可。
 
 运维平台需在小程序后台 request 合法域名添加：`cms.iesztn.com`（本地可勾选不校验合法域名）。
 

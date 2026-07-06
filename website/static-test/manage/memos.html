@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学员备忘录</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>学员备忘录</h2>
+        <p>全站备忘录查看与编辑</p>
+      </div>
+      <div class="stats" id="stats-row"></div>
+      <div class="toolbar">
+        <input id="keyword" class="input" placeholder="搜索标题/内容/学员" style="flex:1;min-width:200px" />
+        <input id="user-id" class="input" type="number" placeholder="学员 ID" style="width:120px" />
+        <button type="button" class="btn btn-primary" id="btn-search">查询</button>
+        <button type="button" class="btn btn-ghost" id="btn-create">新建</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>学员</th><th>标题</th><th>摘要</th><th>更新</th><th>操作</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pager"></div>
+    </main>
+  </div>
+  <div id="modal-memo" class="modal-mask" hidden>
+    <div class="modal modal-wide">
+      <h3 id="memo-title-h"></h3>
+      <p id="memo-meta" class="modal-meta"></p>
+      <div id="memo-user-field">
+        <label class="field-label">学员 ID *</label>
+        <input id="f-user-id" class="input" type="number" min="1" />
+      </div>
+      <label class="field-label">标题</label>
+      <input id="f-title" class="input" maxlength="120" />
+      <label class="field-label">内容 *</label>
+      <textarea id="f-content" class="textarea" rows="8" maxlength="10000"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="modal-memo">取消</button>
+        <button type="button" class="btn btn-primary" id="memo-save">保存</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/memos.js"></script>
+</body>
+</html>

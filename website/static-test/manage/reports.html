@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学习上报</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>学习上报记录</h2>
+        <p>按时间段筛选并导出 Excel</p>
+      </div>
+      <div class="panel toolbar">
+        <label>开始</label><input type="date" id="from" class="input" />
+        <label>结束</label><input type="date" id="to" class="input" />
+        <input id="keyword" class="input" placeholder="昵称/手机/姓名" />
+        <button type="button" class="btn btn-primary" id="btn-search">查询</button>
+        <button type="button" class="btn btn-ghost" data-range="7">近7天</button>
+        <button type="button" class="btn btn-ghost" data-range="30">近30天</button>
+        <button type="button" class="btn btn-ghost" id="btn-export">导出 Excel</button>
+      </div>
+      <p id="summary" class="modal-meta"></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>日期</th><th>学员</th><th>科目</th><th>内容</th><th>目标</th><th>实际</th><th>时段</th><th>完成</th><th>备注</th><th>提交</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pager"></div>
+    </main>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="二维码生成 — 简卡拉卡在线工具箱" />
+  <title>二维码生成 · 简卡拉卡工具箱</title>
+  <link rel="icon" href="../images/brand/logo-mark-square.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../css/style.css?v=20260606" />
+  <link rel="stylesheet" href="tools.css" />
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-aurora"></div>
+    <div class="bg-noise"></div>
+  </div>
+
+  <header class="site-header is-scrolled">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html">
+        <img class="brand-logo" src="../images/brand/logo-mark-square.svg" width="40" height="40" alt="简卡拉卡" />
+        <span class="brand-text">简卡拉卡<small class="brand-en">JIANKALKA</small></span>
+      </a>
+      <nav class="site-nav" aria-label="页面导航">
+        <a class="site-nav-link" href="../index.html#products">产品</a>
+        <a class="site-nav-link" href="../index.html#about">关于</a>
+        <a class="site-nav-link" href="../index.html#contact">联系</a>
+        <div class="nav-dropdown" id="site-nav-dropdown">
+          <button type="button" class="nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="site-nav-dropdown-menu">
+            网站导航
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="nav-dropdown-menu" id="site-nav-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="https://www.ieslab.com.cn/" target="_blank" rel="noopener noreferrer">积成电子官网</a>
+            <a role="menuitem" href="https://www.iesztn.com/" target="_blank" rel="noopener noreferrer">积成智通官网</a>
+            <a role="menuitem" href="https://steve.jiankalka.cn/" target="_blank" rel="noopener noreferrer">Steve OCPP 测试平台</a>
+            <a role="menuitem" href="../manage/login.html">微信小程序管理后台</a>
+          </div>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <div class="nav-dropdown header-dropdown" id="toolbox-dropdown">
+          <button type="button" class="btn btn-header nav-dropdown-trigger-btn" aria-expanded="false" aria-haspopup="true" aria-controls="toolbox-dropdown-menu">
+            工具箱
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-dropdown-menu--right" id="toolbox-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="qrcode.html">二维码生成</a>
+            <a role="menuitem" href="json.html">JSON 数据处理</a>
+            <a role="menuitem" href="convert.html">数据转换及长度计算</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="tool-page">
+    <div class="container">
+      <a class="tool-back" href="../index.html">← 返回官网</a>
+      <header class="tool-head">
+        <h1>二维码生成</h1>
+        <p>输入文字或链接生成 PNG 二维码，支持单条与批量（每行一条，最多 30 条）。</p>
+      </header>
+
+      <div class="tool-tabs" role="tablist">
+        <button type="button" class="tool-tab is-active" data-mode="single">单条生成</button>
+        <button type="button" class="tool-tab" data-mode="batch">批量生成</button>
+      </div>
+
+      <section class="tool-card" id="panel-single">
+        <h2 class="tool-card-title">单条生成</h2>
+        <label class="tool-label" for="qr-text">内容</label>
+        <textarea id="qr-text" class="tool-textarea" maxlength="2000" placeholder="输入 URL、文本、WiFi 配置等…"></textarea>
+        <div class="tool-field-inline">
+          <label>尺寸 <input type="number" id="qr-size" value="280" min="128" max="512" step="8" /></label>
+          <label>容错
+            <select id="qr-ecc">
+              <option value="L">L（约 7%）</option>
+              <option value="M" selected>M（约 15%）</option>
+              <option value="Q">Q（约 25%）</option>
+              <option value="H">H（约 30%）</option>
+            </select>
+          </label>
+        </div>
+        <div class="tool-actions">
+          <button type="button" class="tool-btn tool-btn--primary" id="btn-qr-gen">生成二维码</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-qr-download" disabled>下载 PNG</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-qr-clear">清空</button>
+        </div>
+        <p class="tool-hint">内容过长时自动提高容错或缩小尺寸；生成在本地浏览器完成，不上传服务器。</p>
+        <div id="qr-status" class="tool-status" hidden></div>
+        <div class="qr-preview-wrap" id="qr-single-preview" hidden>
+          <canvas id="qr-canvas"></canvas>
+        </div>
+      </section>
+
+      <section class="tool-card" id="panel-batch" hidden>
+        <h2 class="tool-card-title">批量生成</h2>
+        <label class="tool-label" for="qr-batch-text">每行一条内容</label>
+        <textarea id="qr-batch-text" class="tool-textarea" rows="8" placeholder="https://example.com/a&#10;https://example.com/b&#10;设备 SN001"></textarea>
+        <div class="tool-actions">
+          <button type="button" class="tool-btn tool-btn--primary" id="btn-qr-batch">批量生成</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-qr-batch-dl" disabled>下载全部 PNG</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-qr-batch-clear">清空</button>
+        </div>
+        <div id="qr-batch-status" class="tool-status" hidden></div>
+        <div class="qr-batch-grid" id="qr-batch-grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <script src="../js/dropdown.js?v=20260606"></script>
+  <script src="tools-shell.js"></script>
+  <script src="qrcode.js"></script>
+</body>
+</html>

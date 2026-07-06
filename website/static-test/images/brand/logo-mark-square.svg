@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="JIANKALKA">
+  <defs>
+    <linearGradient id="bg" x1="32" y1="0" x2="32" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#141416"/>
+      <stop offset="1" stop-color="#09090B"/>
+    </linearGradient>
+    <linearGradient id="jk" x1="22" y1="14" x2="42" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#D4D4D8"/>
+    </linearGradient>
+    <linearGradient id="rule" x1="12" y1="42" x2="52" y2="42" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3F3F46" stop-opacity="0"/>
+      <stop offset="0.25" stop-color="#A78BFA" stop-opacity="0.5"/>
+      <stop offset="0.5" stop-color="#34D399" stop-opacity="0.8"/>
+      <stop offset="0.75" stop-color="#A78BFA" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#3F3F46" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="word" x1="32" y1="50" x2="32" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A1A1AA"/>
+      <stop offset="1" stop-color="#71717A"/>
+    </linearGradient>
+    <filter id="jkGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="0.8" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="ecoGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="1" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="15.5" stroke="url(#rule)" stroke-opacity="0.3" fill="none"/>
+  <text x="32" y="34" text-anchor="middle" fill="url(#jk)" font-family="Segoe UI,PingFang SC,sans-serif" font-size="22" font-weight="700" letter-spacing="-0.03em" filter="url(#jkGlow)">JK</text>
+  <circle cx="46" cy="20" r="1.75" fill="#34D399" filter="url(#ecoGlow)"/>
+  <circle cx="46" cy="20" r="3.5" stroke="#34D399" stroke-width="0.6" stroke-opacity="0.35" fill="none"/>
+  <line x1="12" y1="42" x2="52" y2="42" stroke="url(#rule)" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="12" cy="42" r="0.75" fill="#52525B"/>
+  <circle cx="52" cy="42" r="0.75" fill="#52525B"/>
+  <text x="32" y="55" text-anchor="middle" fill="url(#word)" font-family="Segoe UI,Helvetica Neue,sans-serif" font-size="5.2" font-weight="600" letter-spacing="0.28em">JIANKALKA</text>
+</svg>

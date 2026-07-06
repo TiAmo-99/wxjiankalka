@@ -5,7 +5,7 @@
 **代码仓库**：https://github.com/TiAmo-99/wxjiankalka
 
 **生产 API**：`https://server.jiankalka.cn/api/v1`  
-**管理后台**：`https://server.jiankalka.cn/admin/#/login`
+**管理后台**：`https://www.jiankalka.cn/manage/login.html`
 
 ---
 
@@ -30,21 +30,22 @@
 
 ```
 wxjiankalka/
-├── miniapp/              # uni-app 微信小程序（Vue 3）
-├── server/               # Node.js API + admin-web 源码
-│   ├── src/              # 后端路由与服务
-│   ├── admin-web/        # 管理后台前端
-│   ├── public/admin/     # 管理后台构建产物（npm run build:admin）
+├── miniapp/              # 考研学习微信小程序（Vue 3）
+├── miniapp-tool/         # 简卡拉卡Tool 运维小程序（AppID wxa1ac0f0b4deb35e7）
+├── server/               # Node.js API（纯后端）
+│   ├── src/              # 路由与服务
 │   └── data/             # 词库种子 JSON
-├── website/              # www.jiankalka.cn 官网（文档与后续前端工程）
+├── website/              # www 个人官网 + 管理后台静态页
+│   └── static-test/      # 官网 + manage/
 └── docs/                 # 需求、部署、接口约定等文档
 ```
 
 | 目录 | 说明 |
 |------|------|
-| [miniapp/](./miniapp/) | 学员端小程序，见 [miniapp/README.md](./miniapp/README.md) |
-| [server/](./server/) | API 与管理后台，见 [server/README.md](./server/README.md) |
-| [website/](./website/) | 个人官网（充电桩营销 + Web 工具），见 [website/README.md](./website/README.md) |
+| [miniapp/](./miniapp/) | 考研学习小程序，见 [miniapp/README.md](./miniapp/README.md) |
+| [miniapp-tool/](./miniapp-tool/) | 充电桩运维 **简卡拉卡Tool**，见 [miniapp-tool/README.md](./miniapp-tool/README.md) |
+| [server/](./server/) | API 后端，见 [server/README.md](./server/README.md) |
+| [website/](./website/) | 个人官网 + 管理后台前端，见 [website/README.md](./website/README.md) |
 | [docs/](./docs/) | 项目文档索引见下文 |
 
 ---
@@ -58,8 +59,9 @@ wxjiankalka/
 | 今日首页 | 进度、鼓励语、单词预览 | 鼓励话语 CRUD |
 | 英语词库 | 随机单词/语料学习页 | 单词与语料 CRUD、批量导入 |
 | 备忘录 | 云端增删改查、搜索 | 全站备忘录查看与审核 |
-| 权限等级 | L0 计算器；L1+ 二维码；L3+ 工具箱；L10 小程序内审核他人申请 | 学员权限、权限申请处理 |
-| 账号 | 微信注册/登录、个人资料、邮箱提醒设置 | 学员管理 |
+| 权限等级 | L0 计算器；L1+ 二维码；L3+ 工具箱（含充电桩蓝牙运维）；L10 小程序内审核他人申请 | 学员权限、权限申请处理 |
+| 账号 | 微信/手机号登录、注册、个人资料、邮箱提醒、隐私协议 | 学员管理 |
+| 充电桩运维 | L3+ 工具箱：BLE 连接、充电监控、参数配置、固件升级（CCU621） | — |
 | 主题 | 多主题切换（经典蓝 / 女神粉等） | — |
 
 ---
@@ -74,9 +76,12 @@ wxjiankalka/
 | [docs/vocab.md](./docs/vocab.md) | 词库导入命令与 API |
 | [docs/email-remind.md](./docs/email-remind.md) | 邮箱定时提醒配置 |
 | [docs/wechat-notify.md](./docs/wechat-notify.md) | 微信订阅消息（规划/二期） |
+| [docs/充电桩蓝牙调试-实施方案.md](./docs/充电桩蓝牙调试-实施方案.md) | **CCU621** BLE 协议、页面与联调说明 |
+| [docs/微信小程序审核-隐私合规.md](./docs/微信小程序审核-隐私合规.md) | 隐私保护指引、蓝牙/选文件等审核要点 |
 | [website/docs/独立站-架构与开发思路.md](./website/docs/独立站-架构与开发思路.md) | **www** 独立站：语言、架构、前后端是否分离 |
 | [website/docs/个人官网-设计方案.md](./website/docs/个人官网-设计方案.md) | **www** 页面规划与产品内容（可不绑 server） |
-| [server/UPLOAD.md](./server/UPLOAD.md) | 服务端打包上传清单 |
+| [server/UPLOAD.md](./server/UPLOAD.md) | 服务端首次部署 |
+| [server/SERVER-UPDATE.md](./server/SERVER-UPDATE.md) | 服务端增量更新 |
 
 ---
 
@@ -95,12 +100,11 @@ npm run db:import-vocab     # 可选：导入演示词库
 npm run dev                 # http://localhost:3000/api/v1
 ```
 
-管理后台（另开终端）：
+管理后台（静态页，另开终端）：
 
 ```bash
-cd server/admin-web && npm install && cd ..
-npm run build:admin
-# 浏览器打开 http://localhost:3000/admin/#/login
+npx serve website/static-test/manage -p 5174
+# login.html 的 meta 指向 http://127.0.0.1:3000/api/v1
 ```
 
 ### 2. 小程序
@@ -122,9 +126,10 @@ cd server
 git pull
 npm install
 npm run db:migrate
-npm run build:admin
 pm2 restart jiankalka-api
 ```
+
+官网与管理后台：上传 `website/static-test/` 到 www 站点。
 
 小程序使用 HBuilderX **发行 → 小程序-微信** 上传。详细步骤见 [docs/deploy.md](./docs/deploy.md)。
 

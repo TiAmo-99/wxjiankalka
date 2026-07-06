@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学员任务</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main" id="app"></main>
+  </div>
+  <div id="modal-perm" class="modal-mask" hidden>
+    <div class="modal">
+      <h3>修改用户权限</h3>
+      <p class="modal-meta" id="perm-meta"></p>
+      <label class="field-label">权限等级</label>
+      <input id="perm-input" class="input" type="number" min="0" max="10" />
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="modal-perm">取消</button>
+        <button type="button" class="btn btn-primary" id="perm-save">保存</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/user-plans.js"></script>
+</body>
+</html>

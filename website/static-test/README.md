@@ -1,41 +1,51 @@
-# 公网测试静态站
+# www.jiankalka.cn 网站根目录（统一部署）
 
-可直接上传到宝塔 HTML 项目根目录，验证 `www.jiankalka.cn` 是否公网可访问。
+本目录为**整站**静态资源：个人官网 + 考研管理后台，一次上传即可。
 
-## 文件清单
+## 目录结构
 
 ```
 static-test/
-├── index.html      ← 必须放在站点根目录
-├── css/style.css
-├── js/main.js
-└── README.md       （不必上传）
+├── index.html          # 个人官网首页
+├── manage/             # 考研管理后台（静态 HTML）
+├── tools/              # 在线工具箱（二维码 / JSON / 转换）
+├── css/  js/  images/
+└── README.md
 ```
 
-## 部署方式
+## 入口
 
-### A. Git 拉取（推荐）
+| 地址 | 说明 |
+|------|------|
+| `/` | 个人官网 |
+| `/tools/qrcode.html` | 工具箱 · 二维码 |
+| `/tools/json.html` | 工具箱 · JSON |
+| `/tools/convert.html` | 工具箱 · 转换/长度 |
+| `/manage/login.html` | 微信小程序管理后台 |
 
-见 [../docs/Git部署-www站点.md](../docs/Git部署-www站点.md)：服务器 `git clone` / `git pull` 后，将宝塔网站根目录指向本文件夹，或执行 `bash website/scripts/deploy-www.sh`。
+官网顶栏 **「网站导航」** 含外部站点与管理后台；**「工具箱」** 下拉进入上述工具；页脚亦可直达 manage。
 
-### B. 手动上传
+## 部署（宝塔）
 
-1. 打开 **文件** → 进入 `/www/wwwroot/www.jiankalka.cn`
-2. **删除或清空** 目录内宝塔默认的 `index.html`（若有）
-3. 将本目录下 **`index.html`、`css/`、`js/`** 全部上传到此根目录（保持子文件夹结构）
-4. 确认站点 **SSL** 已开启（建议用 `https://www.jiankalka.cn` 访问）
-5. 浏览器访问：`https://www.jiankalka.cn/`
+1. 换图后可选：`python website/scripts/compress-product-images.py`
+2. 上传**整个** `static-test/` 到 `/www/wwwroot/www.jiankalka.cn/`（含 `manage/`）
+3. 清缓存后 **Ctrl+F5** 强刷（CSS/JS 带 `?v=` 版本号）
 
-看到「网站部署成功」即表示 HTML 项目正常。
+### 管理后台 API
 
-## 本地预览（可选）
+默认 `https://server.jiankalka.cn/api/v1`（见 `manage/login.html` 内 `meta admin-api-base`）。
 
-用浏览器直接打开 `index.html`，或在本目录执行：
+## 本地预览
 
 ```bash
-npx --yes serve .
+cd website/static-test
+npx serve .
 ```
 
-## 正式站替换
+- 官网：http://localhost:3000/
+- 工具：http://localhost:3000/tools/qrcode.html
+- 管理：http://localhost:3000/manage/login.html
 
-后续 Vue 工程 `npm run build` 后，用 `dist/` 内文件**覆盖**本目录内容即可。
+## 新增外链
+
+编辑 `index.html` 顶栏下拉，或 `js/site-config.js` 中 `nav` 数组。

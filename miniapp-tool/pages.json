@@ -1,0 +1,160 @@
+{
+  "pages": [
+    {
+      "path": "pages/toolbox/charger-menu/charger-menu",
+      "style": {
+        "navigationBarTitleText": "充电桩",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/toolbox/toolbox",
+      "style": {
+        "navigationBarTitleText": "工具",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-bluetooth/charger-bluetooth",
+      "style": {
+        "navigationBarTitleText": "蓝牙连接与收发"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-info/charger-info",
+      "style": {
+        "navigationBarTitleText": "充电桩信息"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-stub/charger-stub",
+      "style": {
+        "navigationBarTitleText": "功能预留"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-connect/connect",
+      "style": {
+        "navigationBarTitleText": "蓝牙连接"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-monitor/monitor",
+      "style": {
+        "navigationBarTitleText": "充电监控"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-ble-debug/ble-debug",
+      "style": {
+        "navigationBarTitleText": "蓝牙收发调试"
+      }
+    },
+    {
+      "path": "pages/toolbox/ops-platform/ops-platform",
+      "style": {
+        "navigationBarTitleText": "运维平台调试"
+      }
+    },
+    {
+      "path": "pages/toolbox/calculator/calculator",
+      "style": {
+        "navigationBarTitleText": "计算器"
+      }
+    },
+    {
+      "path": "pages/toolbox/qrcode/qrcode",
+      "style": {
+        "navigationBarTitleText": "二维码"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/register/register",
+      "style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
+      "path": "pages/set-password/set-password",
+      "style": {
+        "navigationBarTitleText": "设置密码"
+      }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": {
+        "navigationBarTitleText": "个人资料"
+      }
+    },
+    {
+      "path": "pages/permission-apply/permission-apply",
+      "style": {
+        "navigationBarTitleText": "权限申请",
+        "navigationBarBackgroundColor": "#3f60ea",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/legal/privacy/index",
+      "style": {
+        "navigationBarTitleText": "隐私政策"
+      }
+    },
+    {
+      "path": "pages/legal/user-agreement/index",
+      "style": {
+        "navigationBarTitleText": "用户服务协议"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "简卡拉卡Tool",
+    "navigationBarBackgroundColor": "#3f60ea",
+    "backgroundColor": "#f4f6ff",
+    "backgroundColorTop": "#f4f6ff",
+    "backgroundColorBottom": "#f4f6ff"
+  },
+  "tabBar": {
+    "color": "#8a94a6",
+    "selectedColor": "#3f60ea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/toolbox/charger-menu/charger-menu",
+        "text": "设备",
+        "iconPath": "static/tab/report.png",
+        "selectedIconPath": "static/tab/report-active.png"
+      },
+      {
+        "pagePath": "pages/toolbox/toolbox",
+        "text": "工具",
+        "iconPath": "static/tab/plan.png",
+        "selectedIconPath": "static/tab/plan-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "static/tab/mine.png",
+        "selectedIconPath": "static/tab/mine-active.png"
+      }
+    ]
+  }
+}

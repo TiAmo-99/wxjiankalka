@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JSON 校验、格式化、表格互转 — 简卡拉卡在线工具箱" />
+  <title>JSON 数据处理 · 简卡拉卡工具箱</title>
+  <link rel="icon" href="../images/brand/logo-mark-square.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../css/style.css?v=20260606" />
+  <link rel="stylesheet" href="tools.css" />
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-aurora"></div>
+    <div class="bg-noise"></div>
+  </div>
+
+  <header class="site-header is-scrolled">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html">
+        <img class="brand-logo" src="../images/brand/logo-mark-square.svg" width="40" height="40" alt="简卡拉卡" />
+        <span class="brand-text">简卡拉卡<small class="brand-en">JIANKALKA</small></span>
+      </a>
+      <nav class="site-nav" aria-label="页面导航">
+        <a class="site-nav-link" href="../index.html#products">产品</a>
+        <a class="site-nav-link" href="../index.html#about">关于</a>
+        <a class="site-nav-link" href="../index.html#contact">联系</a>
+        <div class="nav-dropdown" id="site-nav-dropdown">
+          <button type="button" class="nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="site-nav-dropdown-menu">
+            网站导航
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="nav-dropdown-menu" id="site-nav-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="https://www.ieslab.com.cn/" target="_blank" rel="noopener noreferrer">积成电子官网</a>
+            <a role="menuitem" href="https://www.iesztn.com/" target="_blank" rel="noopener noreferrer">积成智通官网</a>
+            <a role="menuitem" href="https://steve.jiankalka.cn/" target="_blank" rel="noopener noreferrer">Steve OCPP 测试平台</a>
+            <a role="menuitem" href="../manage/login.html">微信小程序管理后台</a>
+          </div>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <div class="nav-dropdown header-dropdown" id="toolbox-dropdown">
+          <button type="button" class="btn btn-header nav-dropdown-trigger-btn" aria-expanded="false" aria-haspopup="true" aria-controls="toolbox-dropdown-menu">
+            工具箱
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-dropdown-menu--right" id="toolbox-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="qrcode.html">二维码生成</a>
+            <a role="menuitem" href="json.html">JSON 数据处理</a>
+            <a role="menuitem" href="convert.html">数据转换及长度计算</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="tool-page">
+    <div class="container">
+      <a class="tool-back" href="../index.html">← 返回官网</a>
+      <header class="tool-head">
+        <h1>JSON 数据处理</h1>
+        <p>校验与格式化 JSON、解析为键值类型表格、由表格编辑生成 JSON。</p>
+      </header>
+
+      <div class="tool-tabs">
+        <button type="button" class="tool-tab is-active" data-panel="format">校验与格式化</button>
+        <button type="button" class="tool-tab" data-panel="to-table">JSON → 表格</button>
+        <button type="button" class="tool-tab" data-panel="from-table">表格 → JSON</button>
+      </div>
+
+      <section class="tool-card tool-panel" id="panel-format">
+        <h2 class="tool-card-title">校验与格式化</h2>
+        <label class="tool-label" for="json-input">JSON 字符串</label>
+        <textarea id="json-input" class="tool-textarea" rows="10" placeholder='{"name":"简卡拉卡","level":3,"ok":true}'></textarea>
+        <div class="tool-actions">
+          <button type="button" class="tool-btn tool-btn--primary" id="btn-json-validate">校验</button>
+          <button type="button" class="tool-btn" id="btn-json-format">格式化</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-json-minify">压缩为一行</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-json-clear-fmt">清空</button>
+        </div>
+        <div id="json-fmt-status" class="tool-status" hidden></div>
+        <pre class="tool-output" id="json-fmt-output" hidden></pre>
+      </section>
+
+      <section class="tool-card tool-panel" id="panel-to-table" hidden>
+        <h2 class="tool-card-title">JSON → 表格</h2>
+        <label class="tool-label" for="json-table-input">JSON 字符串</label>
+        <textarea id="json-table-input" class="tool-textarea" rows="8" placeholder='{"device":"charger","power_kw":120,"tags":["dc","fast"]}'></textarea>
+        <div class="tool-actions">
+          <button type="button" class="tool-btn tool-btn--primary" id="btn-json-table">解析为表格</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-json-table-copy">复制 JSON</button>
+        </div>
+        <div id="json-table-status" class="tool-status" hidden></div>
+        <div class="tool-table-wrap" id="json-table-wrap" hidden>
+          <table class="tool-table">
+            <thead><tr><th>键（路径）</th><th>值</th><th>数据类型</th></tr></thead>
+            <tbody id="json-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tool-card tool-panel" id="panel-from-table" hidden>
+        <h2 class="tool-card-title">表格 → JSON</h2>
+        <p class="tool-hint" style="margin-top:0;margin-bottom:12px">键支持点号路径（如 <code>user.name</code>）与数组下标（如 <code>items[0]</code>）。</p>
+        <div class="tool-table-wrap">
+          <table class="tool-table" id="edit-table">
+            <thead>
+              <tr>
+                <th style="width:32%">键</th>
+                <th style="width:42%">值</th>
+                <th style="width:18%">类型</th>
+                <th style="width:8%"></th>
+              </tr>
+            </thead>
+            <tbody id="edit-table-body"></tbody>
+          </table>
+        </div>
+        <div class="tool-actions">
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-row-add">添加行</button>
+          <button type="button" class="tool-btn tool-btn--primary" id="btn-table-json">生成 JSON</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-table-copy">复制结果</button>
+        </div>
+        <div id="table-json-status" class="tool-status" hidden></div>
+        <pre class="tool-output" id="table-json-output" hidden></pre>
+      </section>
+    </div>
+  </main>
+
+  <script src="../js/dropdown.js?v=20260606"></script>
+  <script src="tools-shell.js"></script>
+  <script src="json.js"></script>
+</body>
+</html>

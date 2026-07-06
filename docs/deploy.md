@@ -350,20 +350,15 @@ curl -s -X POST https://server.jiankalka.cn/api/v1/auth/admin-login \
 
 ---
 
-## 十六、网页管理后台（集成在 server）
+## 十六、网页管理后台（部署在 www）
 
-无需 `admin.jiankalka.cn`，与 API 同域访问：
-
-**`https://server.jiankalka.cn/admin/#/login`**
+**`https://www.jiankalka.cn/manage/login.html`**
 
 | 项 | 说明 |
 |----|------|
-| 详细步骤 | [server/UPLOAD.md](../server/UPLOAD.md) 第八节 |
-| 静态目录 | `server/public/admin/`（`npm run build:admin` 生成） |
+| 静态源码 | `website/static-test/manage/` |
+| 部署 | 与官网一并上传 `website/static-test/`，见 [website/static-test/README.md](../website/static-test/README.md) |
+| API | `https://server.jiankalka.cn/api/v1`（`login.html` 内 `meta admin-api-base`） |
 | 登录接口 | `POST /api/v1/auth/admin-login` |
 
-```bash
-cd /www/wwwroot/jian/server
-cd admin-web && npm install && cd ..
-npm run build:admin && pm2 restart jiankalka-api
-```
+`server` 仅提供 API，不再托管 `/admin`。服务端更新见 [server/SERVER-UPDATE.md](../server/SERVER-UPDATE.md)。

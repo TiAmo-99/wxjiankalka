@@ -72,7 +72,7 @@ www.jiankalka.cn     →  Nginx 静态（+ 可选 /api 反代）
 server.jiankalka.cn  →  Nginx 反代 127.0.0.1:3000（PM2 jiankalka-api）
 ```
 
-**不要**把官网与 API 混在同一站点根目录下随意改 `root`，避免覆盖 `public/admin`。
+**不要**把官网与 API 混在同一站点根目录下随意改 `root`；`server` 仅跑 API，静态站在 www。
 
 ---
 

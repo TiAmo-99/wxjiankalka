@@ -4,12 +4,9 @@ node_modules/
 
 # Uni-app build output
 miniapp/unpackage/
+miniapp-tool/unpackage/
 miniapp/dist/
 .hbuilderx/
-
-# Admin web build (rebuild with npm run build:admin)
-server/public/admin/*
-!server/public/admin/.gitkeep
 
 # Environment & secrets
 .env

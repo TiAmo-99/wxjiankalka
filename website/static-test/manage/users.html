@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学员管理</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>学员管理</h2>
+        <p>查看小程序注册用户，为学员配置每日学习任务 · <a href="import.html">批量导入</a></p>
+      </div>
+      <div class="toolbar">
+        <input id="keyword" class="input" placeholder="搜索昵称/手机/姓名" />
+        <select id="status" class="select">
+          <option value="">全部状态</option>
+          <option value="active">正常</option>
+          <option value="disabled">已禁用</option>
+        </select>
+        <button type="button" class="btn btn-primary" id="btn-search">查询</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th><th>昵称</th><th>姓名</th><th>手机</th><th>权限</th><th>微信</th><th>状态</th><th>注册时间</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pager"></div>
+    </main>
+  </div>
+  <div id="modal-perm" class="modal-mask" hidden>
+    <div class="modal">
+      <h3>修改用户权限</h3>
+      <p class="modal-meta" id="perm-meta"></p>
+      <label class="field-label">权限等级（0～9，工具箱需 &gt;2）</label>
+      <input id="perm-input" class="input" type="number" min="0" max="10" />
+      <p class="modal-meta" style="font-size:12px">0=普通学员 · 3 及以上可使用工具箱 · 10=最终管理员</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="modal-perm">取消</button>
+        <button type="button" class="btn btn-primary" id="perm-save">保存</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/users.js"></script>
+</body>
+</html>

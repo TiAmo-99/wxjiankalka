@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>权限申请</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>权限申请</h2>
+        <p>审核学员权限升级申请</p>
+      </div>
+      <div class="toolbar">
+        <select id="status" class="select">
+          <option value="">全部</option>
+          <option value="pending" selected>待审核</option>
+          <option value="approved">已通过</option>
+          <option value="rejected">已拒绝</option>
+        </select>
+        <button type="button" class="btn btn-primary" id="btn-load">刷新</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th><th>学员</th><th>手机</th><th>当前</th><th>申请</th><th>原因</th><th>状态</th><th>时间</th><th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pager"></div>
+    </main>
+  </div>
+  <div id="modal-review" class="modal-mask" hidden>
+    <div class="modal">
+      <h3 id="review-title"></h3>
+      <p class="modal-meta" id="review-meta"></p>
+      <p id="review-reason" style="padding:12px;background:#f9fafb;border-radius:8px;font-size:14px"></p>
+      <label class="field-label">通过后赋予等级</label>
+      <input id="review-level" class="input" type="number" min="0" max="9" />
+      <label class="field-label">审核备注</label>
+      <input id="review-note" class="input" placeholder="可选" />
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="modal-review">取消</button>
+        <button type="button" class="btn btn-danger" id="review-reject">拒绝</button>
+        <button type="button" class="btn btn-primary" id="review-approve">通过</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/permission-requests.js"></script>
+</body>
+</html>

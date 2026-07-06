@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录 · 考研管理后台</title>
+  <!-- 官网已反代 /api 到 server 时，可改为 content="/api/v1" -->
+  <meta name="admin-api-base" content="https://server.jiankalka.cn/api/v1" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="icon" href="../images/brand/logo-mark-square.svg" type="image/svg+xml" />
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <p style="margin:0 0 12px;font-size:13px"><a href="../index.html">← 返回官网</a></p>
+    <h1>考研学习记录</h1>
+    <p class="sub">管理后台</p>
+    <form id="login-form">
+      <label for="username">账号</label>
+      <input id="username" class="input" name="username" autocomplete="username" placeholder="管理员账号" value="admin" />
+      <label for="password">密码</label>
+      <input id="password" class="input" type="password" name="password" autocomplete="current-password" placeholder="密码" />
+      <button class="btn btn-primary" type="submit" id="btn-submit">登录</button>
+      <p id="login-error" class="login-error" hidden></p>
+    </form>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    if (window.AdminApi.getToken()) {
+      location.replace('users.html')
+    }
+    document.getElementById('login-form').onsubmit = async function (e) {
+      e.preventDefault()
+      var err = document.getElementById('login-error')
+      var btn = document.getElementById('btn-submit')
+      err.hidden = true
+      btn.disabled = true
+      btn.textContent = '登录中…'
+      try {
+        var data = await window.AdminApi.login(
+          document.getElementById('username').value.trim(),
+          document.getElementById('password').value
+        )
+        if (!data || !data.token) throw new Error('未返回登录凭证')
+        window.AdminApi.setToken(data.token)
+        location.href = 'users.html'
+      } catch (ex) {
+        err.textContent = ex.message || '登录失败'
+        err.hidden = false
+      } finally {
+        btn.disabled = false
+        btn.textContent = '登录'
+      }
+    }
+  </script>
+</body>
+</html>

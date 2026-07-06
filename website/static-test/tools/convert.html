@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="字符串与 HEX 互转、长度计算 — 简卡拉卡在线工具箱" />
+  <title>数据转换及长度计算 · 简卡拉卡工具箱</title>
+  <link rel="icon" href="../images/brand/logo-mark-square.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../css/style.css?v=20260606" />
+  <link rel="stylesheet" href="tools.css" />
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-aurora"></div>
+    <div class="bg-noise"></div>
+  </div>
+
+  <header class="site-header is-scrolled">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html">
+        <img class="brand-logo" src="../images/brand/logo-mark-square.svg" width="40" height="40" alt="简卡拉卡" />
+        <span class="brand-text">简卡拉卡<small class="brand-en">JIANKALKA</small></span>
+      </a>
+      <nav class="site-nav" aria-label="页面导航">
+        <a class="site-nav-link" href="../index.html#products">产品</a>
+        <a class="site-nav-link" href="../index.html#about">关于</a>
+        <a class="site-nav-link" href="../index.html#contact">联系</a>
+        <div class="nav-dropdown" id="site-nav-dropdown">
+          <button type="button" class="nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true" aria-controls="site-nav-dropdown-menu">
+            网站导航
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="nav-dropdown-menu" id="site-nav-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="https://www.ieslab.com.cn/" target="_blank" rel="noopener noreferrer">积成电子官网</a>
+            <a role="menuitem" href="https://www.iesztn.com/" target="_blank" rel="noopener noreferrer">积成智通官网</a>
+            <a role="menuitem" href="https://steve.jiankalka.cn/" target="_blank" rel="noopener noreferrer">Steve OCPP 测试平台</a>
+            <a role="menuitem" href="../manage/login.html">微信小程序管理后台</a>
+          </div>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <div class="nav-dropdown header-dropdown" id="toolbox-dropdown">
+          <button type="button" class="btn btn-header nav-dropdown-trigger-btn" aria-expanded="false" aria-haspopup="true" aria-controls="toolbox-dropdown-menu">
+            工具箱
+            <svg class="nav-dropdown-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-dropdown-menu--right" id="toolbox-dropdown-menu" role="menu" hidden>
+            <a role="menuitem" href="qrcode.html">二维码生成</a>
+            <a role="menuitem" href="json.html">JSON 数据处理</a>
+            <a role="menuitem" href="convert.html">数据转换及长度计算</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="tool-page">
+    <div class="container">
+      <a class="tool-back" href="../index.html">← 返回官网</a>
+      <header class="tool-head">
+        <h1>数据转换及长度计算</h1>
+        <p>字符串与 HEX（UTF-8 字节）互转，并统计字符数、字节数与 HEX 长度。</p>
+      </header>
+
+      <section class="tool-card">
+        <h2 class="tool-card-title">输入</h2>
+        <label class="tool-label">输入类型</label>
+        <div class="tool-radio-group" style="margin-bottom:14px">
+          <label class="tool-radio"><input type="radio" name="input-type" value="string" checked /> 字符串</label>
+          <label class="tool-radio"><input type="radio" name="input-type" value="hex" /> HEX</label>
+        </div>
+        <label class="tool-label" for="conv-input">内容</label>
+        <textarea id="conv-input" class="tool-textarea" rows="6" placeholder="字符串示例：Hello 简卡拉卡&#10;HEX 示例：48 65 6C 6C 6F 或 48656C6C6F"></textarea>
+        <div class="tool-field-inline">
+          <label class="tool-radio"><input type="checkbox" id="hex-upper" checked /> HEX 大写</label>
+          <label class="tool-radio"><input type="checkbox" id="hex-space" checked /> 字节间加空格</label>
+        </div>
+        <div class="tool-actions">
+          <button type="button" class="tool-btn tool-btn--primary" id="btn-convert">转换</button>
+          <button type="button" class="tool-btn" id="btn-length">计算长度</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-swap">交换输入/输出</button>
+          <button type="button" class="tool-btn tool-btn--ghost" id="btn-conv-clear">清空</button>
+        </div>
+        <div id="conv-status" class="tool-status" hidden></div>
+      </section>
+
+      <section class="tool-card">
+        <h2 class="tool-card-title">输出</h2>
+        <label class="tool-label">输出类型</label>
+        <div class="tool-radio-group" style="margin-bottom:14px">
+          <label class="tool-radio"><input type="radio" name="output-type" value="hex" /> HEX</label>
+          <label class="tool-radio"><input type="radio" name="output-type" value="string" checked /> 字符串</label>
+        </div>
+        <pre class="tool-output" id="conv-output" style="min-height:100px;margin-top:0">（转换结果将显示在这里）</pre>
+        <div id="length-result" class="tool-status tool-status--info" style="margin-top:16px" hidden></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="../js/dropdown.js?v=20260606"></script>
+  <script src="tools-shell.js"></script>
+  <script src="convert.js"></script>
+</body>
+</html>

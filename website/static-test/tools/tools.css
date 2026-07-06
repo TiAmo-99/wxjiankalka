@@ -1,0 +1,369 @@
+/* 工具页 — 与官网 style.css 联用 */
+.tool-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: clamp(100px, 12vh, 120px) 0 clamp(48px, 6vh, 72px);
+}
+
+.tool-page .container {
+  max-width: min(960px, 100%);
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+.tool-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.tool-back:hover {
+  color: var(--primary-bright);
+}
+
+.tool-head {
+  margin-bottom: 28px;
+}
+
+.tool-head h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.tool-head p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.tool-card {
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: var(--radius);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  margin-bottom: 20px;
+}
+
+.tool-card-title {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tool-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tool-tab {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.5);
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.tool-tab.is-active {
+  border-color: var(--glass-border);
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--primary-bright);
+}
+
+.tool-panel[hidden] {
+  display: none;
+}
+
+.tool-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.tool-textarea,
+.tool-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(5, 8, 16, 0.6);
+  color: var(--text);
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.tool-textarea:focus,
+.tool-input:focus {
+  outline: none;
+  border-color: rgba(167, 139, 250, 0.5);
+}
+
+.tool-textarea {
+  min-height: 120px;
+}
+
+.tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tool-btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(167, 139, 250, 0.12);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.tool-btn:hover {
+  background: rgba(167, 139, 250, 0.22);
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.2);
+}
+
+.tool-btn--primary {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.9), rgba(56, 189, 248, 0.75));
+  border-color: transparent;
+}
+
+.tool-btn--ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.tool-hint {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--muted-dim);
+  line-height: 1.5;
+}
+
+.tool-status {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.tool-status--ok {
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: #6ee7b7;
+}
+
+.tool-status--err {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fca5a5;
+}
+
+.tool-status--info {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #7dd3fc;
+}
+
+.tool-output {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(5, 8, 16, 0.55);
+  border: 1px solid var(--border);
+  font-family: ui-monospace, 'Consolas', monospace;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 360px;
+  overflow: auto;
+}
+
+.tool-table-wrap {
+  margin-top: 16px;
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.tool-table th,
+.tool-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.tool-table th {
+  background: rgba(167, 139, 250, 0.1);
+  color: var(--primary-bright);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tool-table td {
+  color: var(--text);
+  vertical-align: top;
+}
+
+.tool-table tr:last-child td {
+  border-bottom: none;
+}
+
+.tool-table input,
+.tool-table select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(5, 8, 16, 0.6);
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.tool-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tool-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tool-radio input {
+  accent-color: var(--primary);
+}
+
+.qr-preview-wrap {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.qr-preview-wrap canvas,
+.qr-preview-wrap img {
+  border-radius: 12px;
+  background: #fff;
+  padding: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.qr-batch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.qr-batch-item {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(5, 8, 16, 0.4);
+  text-align: center;
+}
+
+.qr-batch-item canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #fff;
+  padding: 4px;
+}
+
+.qr-batch-label {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  word-break: break-all;
+  line-height: 1.4;
+  max-height: 2.8em;
+  overflow: hidden;
+}
+
+.qr-batch-item .tool-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+}
+
+.tool-field-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tool-field-inline label {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.tool-field-inline input[type='number'],
+.tool-field-inline select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(5, 8, 16, 0.6);
+  color: var(--text);
+}
+
+@media (max-width: 720px) {
+  .tool-page {
+    padding-top: 88px;
+  }
+
+  .tool-actions .tool-btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}

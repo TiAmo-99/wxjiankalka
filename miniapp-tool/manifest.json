@@ -1,0 +1,38 @@
+{
+    "name" : "简卡拉卡Tool",
+    "appid" : "__UNI__JKLKTOOL",
+    "description" : "充电桩蓝牙运维与现场调试工具",
+    "versionName" : "1.0.0",
+    "versionCode" : "100",
+    "transformPx" : false,
+    "vueVersion" : "3",
+    "locale" : "zh-Hans",
+    "mp-weixin" : {
+        "appid" : "wxa1ac0f0b4deb35e7",
+        "setting" : {
+            "urlCheck" : true,
+            "es6" : true,
+            "postcss" : true,
+            "minified" : true,
+            "enhance" : true
+        },
+        "usingComponents" : true,
+        "optimization" : {
+            "subPackages" : false
+        },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "Android 扫描蓝牙设备需要定位权限（系统要求）"
+            }
+        },
+        "__usePrivacyCheck__" : true
+    },
+    "uniStatistics" : {
+        "enable" : false
+    },
+    "app-plus" : {
+        "modules" : {
+            "Bluetooth" : {}
+        }
+    }
+}

@@ -22,7 +22,7 @@ MAIL_FROM=考研学习记录 <noreply@你的域名.com>
 
 # 学员在小程序提交权限申请后，通知管理员（默认 jiankalka@qq.com）
 PERM_NOTIFY_EMAIL=jiankalka@qq.com
-ADMIN_BASE_URL=https://server.jiankalka.cn/admin
+ADMIN_BASE_URL=https://www.jiankalka.cn/manage
 ```
 
 权限申请通知与学员学习提醒共用同一套 SMTP；未配置 SMTP 时申请仍可成功，仅跳过发信并在服务端日志提示。

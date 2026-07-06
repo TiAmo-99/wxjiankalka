@@ -1,0 +1,16 @@
+{
+  "description": "简卡拉卡Tool 微信小程序工程配置",
+  "compileType": "miniprogram",
+  "appid": "wxa1ac0f0b4deb35e7",
+  "projectname": "简卡拉卡Tool",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": false,
+    "enhance": false,
+    "minifyWXML": false
+  },
+  "libVersion": "3.3.5",
+  "condition": {}
+}

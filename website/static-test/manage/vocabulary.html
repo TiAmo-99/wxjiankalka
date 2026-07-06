@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英语词库</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>英语词库</h2>
+        <p>单词与学习语料管理</p>
+      </div>
+      <div class="stats" id="stats-row"></div>
+      <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="words">单词</button>
+        <button type="button" class="tab-btn" data-tab="phrases">语料</button>
+      </div>
+      <div id="panel-words">
+        <div class="toolbar">
+          <input id="w-keyword" class="input" placeholder="搜索单词/释义" style="flex:1" />
+          <select id="w-status" class="select">
+            <option value="">全部</option>
+            <option value="1">启用</option>
+            <option value="0">停用</option>
+          </select>
+          <button type="button" class="btn btn-primary" id="w-search">查询</button>
+          <button type="button" class="btn btn-ghost" id="w-create">新增单词</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>单词</th><th>音标</th><th>释义</th><th>标签</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody id="w-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="panel-phrases" hidden>
+        <div class="toolbar">
+          <input id="p-keyword" class="input" placeholder="搜索" style="flex:1" />
+          <select id="p-kind" class="select">
+            <option value="">全部类型</option>
+            <option value="phrase">短语</option>
+            <option value="sentence">长句</option>
+            <option value="passage">阅读片段</option>
+          </select>
+          <select id="p-status" class="select">
+            <option value="">全部状态</option>
+            <option value="1">启用</option>
+            <option value="0">停用</option>
+          </select>
+          <button type="button" class="btn btn-primary" id="p-search">查询</button>
+          <button type="button" class="btn btn-ghost" id="p-create">新增语料</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>类型</th><th>标题</th><th>英文</th><th>中文</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody id="p-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="pager" id="pager"></div>
+    </main>
+  </div>
+  <div id="modal-word" class="modal-mask" hidden>
+    <div class="modal modal-wide">
+      <h3 id="word-modal-title">单词</h3>
+      <div class="form-grid">
+        <label class="full">英文 *<input id="wf-word" class="input" /></label>
+        <label>音标<input id="wf-phonetic" class="input" /></label>
+        <label>标签<input id="wf-tags" class="input" value="kaoyan" /></label>
+        <label class="full">中文释义 *<textarea id="wf-meaning" class="textarea" rows="2"></textarea></label>
+        <label class="full">英文例句<input id="wf-ex-en" class="input" /></label>
+        <label class="full">例句中文<input id="wf-ex-zh" class="input" /></label>
+        <label>状态<select id="wf-status" class="select"><option value="1">启用</option><option value="0">停用</option></select></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="modal-word">取消</button>
+        <button type="button" class="btn btn-primary" id="word-save">保存</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal-phrase" class="modal-mask" hidden>
+    <div class="modal modal-wide">
+      <h3 id="phrase-modal-title">语料</h3>
+      <div class="form-grid">
+        <label>类型<select id="pf-kind" class="select"><option value="phrase">短语</option><option value="sentence">长句</option><option value="passage">阅读片段</option></select></label>
+        <label>标题<input id="pf-title" class="input" /></label>
+        <label class="full">英文 *<textarea id="pf-en" class="textarea" rows="4"></textarea></label>
+        <label class="full">中文 *<textarea id="pf-zh" class="textarea" rows="3"></textarea></label>
+        <label>标签<input id="pf-tags" class="input" value="kaoyan" /></label>
+        <label>状态<select id="pf-status" class="select"><option value="1">启用</option><option value="0">停用</option></select></label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close="modal-phrase">取消</button>
+        <button type="button" class="btn btn-primary" id="phrase-save">保存</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/vocabulary.js"></script>
+</body>
+</html>

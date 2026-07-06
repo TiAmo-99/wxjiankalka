@@ -57,7 +57,7 @@ Authorization: Bearer <token>
 - 路由：`server/src/routes/auth.js`、`server/src/routes/tools.js`
 - 服务：`server/src/services/authService.js`
 - 小程序封装：`miniapp/utils/auth.js`、`miniapp/utils/request.js`
-- 管理后台封装：`server/admin-web/src/api/request.js`
+- 管理后台封装：`website/admin/src/api/request.js`
 
 ---
 
@@ -125,7 +125,7 @@ cors({
 3. `20003` 展示「权限不足」并链到 `/app/permission`。
 4. 请求超时、网络错误与 API 错误区分提示。
 
-可与 `admin-web/src/api/request.js` 对齐逻辑，baseURL 改为官网配置。
+可与 `website/admin/src/api/request.js` 对齐逻辑，baseURL 改为官网配置。
 
 ---
 

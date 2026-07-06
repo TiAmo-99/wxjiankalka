@@ -1,0 +1,71 @@
+/* 固定底栏（需在 foot-bar 上绑定 :style="themeVars"） */
+.foot-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 28rpx calc(20rpx + env(safe-area-inset-bottom));
+  background: var(--theme-card-bg, #fff);
+  border-top: 1rpx solid var(--theme-border-soft, #e5e7eb);
+  box-shadow: 0 -8rpx 24rpx rgba(15, 23, 42, 0.08);
+  z-index: 10;
+
+  .btn-ghost,
+  .btn-submit {
+    height: 88rpx;
+    line-height: 88rpx;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 999rpx;
+    font-size: 30rpx;
+    font-weight: 600;
+
+    &::after {
+      border: none;
+    }
+  }
+
+  .btn-ghost {
+    flex: 1;
+    background: #f3f4f6 !important;
+    color: #4b5563 !important;
+  }
+
+  .btn-submit {
+    flex: 2;
+    background: var(--theme-primary, #3f60ea) !important;
+    color: #fff !important;
+    box-shadow: 0 8rpx 24rpx rgba(15, 23, 42, 0.18);
+
+    &.disabled,
+    &[disabled] {
+      opacity: 0.72;
+    }
+  }
+}
+
+/* 表单内主按钮（父级 scroll-view 需绑定 themeVars） */
+.btn-submit {
+  height: 88rpx;
+  line-height: 88rpx;
+  background: var(--theme-primary, #3f60ea) !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 24rpx rgba(15, 23, 42, 0.12);
+
+  &::after {
+    border: none;
+  }
+
+  &[disabled],
+  &.disabled {
+    opacity: 0.72;
+  }
+}

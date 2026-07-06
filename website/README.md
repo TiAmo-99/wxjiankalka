@@ -1,6 +1,6 @@
 # www.jiankalka.cn 个人官网
 
-充电桩产品营销 + Web 小工具。**默认按独立站建设**，与仓库内 `miniapp/`、`server/` 无耦合；若需共用考研小程序账号，见「对接现有 API」文档。
+个人官网（充电桩产品展示）+ **考研管理后台前端**（`admin/`）+ 规划中的 Web 工具。官网静态站与 `miniapp/`、`server/` API 可解耦；管理后台构建产物由 `server` 托管。
 
 ## 文档索引
 
@@ -34,15 +34,27 @@
 - **Git 部署**：[docs/Git部署-www站点.md](./docs/Git部署-www站点.md)  
 - **手动上传**：[static-test/README.md](./static-test/README.md)
 
-## 规划目录
+## 目录结构
 
 ```
 website/
-├── static-test/  # 宝塔 HTML 项目公网测试（当前可用）
-├── web/          # 前端（待初始化 Vue）
-├── api/          # 后端（可选；纯静态阶段可无）
+├── static-test/  # 整站根目录：官网 + manage + tools（www 上传此目录）
 ├── content/      # 产品 JSON、Markdown
 └── docs/
+```
+
+### 管理后台
+
+位于 **`static-test/manage/`**，与官网同仓同部署。入口：官网顶栏「网站导航 → 微信小程序管理后台」或「管理后台」按钮。
+
+详见 [static-test/README.md](./static-test/README.md)、[static-test/manage/README.md](./static-test/manage/README.md)。
+
+## 规划目录（后续）
+
+```
+website/
+├── web/          # 官网 Vue 应用（工具箱等，待初始化）
+└── api/          # 官网独立后端（可选）
 ```
 
 ## 仓库关系

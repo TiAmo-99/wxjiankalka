@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>鼓励话语</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="admin-sidebar"></aside>
+    <main class="main">
+      <div class="head">
+        <h2>鼓励话语</h2>
+        <p>小程序首页底部随机展示</p>
+      </div>
+      <div class="panel">
+        <h3>新增鼓励语</h3>
+        <textarea id="content" class="textarea" rows="3" maxlength="500" placeholder="例如：每一天的努力，都在为梦想蓄力。"></textarea>
+        <div class="toolbar" style="margin-top:12px">
+          <input id="sort-order" class="input" type="number" placeholder="排序" style="width:160px" value="0" />
+          <button type="button" class="btn btn-primary" id="btn-add">添加</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>内容</th><th>排序</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/pages/encouragements.js"></script>
+</body>
+</html>
