@@ -29,6 +29,10 @@ function canUseToolbox(permLevel) {
   return clampLevel(permLevel) > 2
 }
 
+function canUseQrcode(permLevel) {
+  return clampLevel(permLevel) > 0
+}
+
 function mapRequest(row) {
   if (!row) return null
   return {
@@ -117,7 +121,10 @@ async function notifyAdminNewPermissionRequest({ request, user }) {
   const to = String(config.permNotifyEmail || '').trim()
   if (!to) return
 
-  const adminLink = `${config.adminBaseUrl.replace(/\/$/, '')}/#/permission-requests`
+  const base = config.adminBaseUrl.replace(/\/$/, '')
+  const adminLink = base.endsWith('.html')
+    ? base.replace(/[^/]+\.html$/, 'permission-requests.html')
+    : `${base}/permission-requests.html`
   const label = formatUserLabel(user)
   const phone = String(user.phone || '').trim() || '未填写'
   const now = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false })
@@ -315,6 +322,7 @@ module.exports = {
   clampLevel,
   clampGrantLevel,
   canUseToolbox,
+  canUseQrcode,
   createRequest,
   listMyRequests,
   listPendingForFinalAdmin,

@@ -3,10 +3,34 @@
   <scroll-view class="page" :style="themeVars" scroll-y>
     <view class="hero">
       <text class="hero-title">新增学习任务</text>
-      <text class="hero-desc">为自己添加今天及以后的学习安排，将出现在对应日期的计划中</text>
+      <text class="hero-desc">{{ heroDesc }}</text>
     </view>
 
     <view class="card">
+      <view v-if="isAdmin" class="form-item admin-block">
+        <text class="label">分配给</text>
+        <input
+          v-model="studentKeyword"
+          class="input search-input"
+          placeholder="搜索昵称 / 手机号 / 姓名"
+          maxlength="30"
+          @confirm="loadStudents"
+        />
+        <picker
+          mode="selector"
+          :range="assignOptions"
+          range-key="label"
+          :value="assignIndex"
+          @change="onAssignChange"
+        >
+          <view class="date-pick filled assign-pick">
+            <text class="date-val">{{ assignLabel }}</text>
+            <text class="date-arrow">›</text>
+          </view>
+        </picker>
+        <text class="hint">L10 管理员可为其他学员创建任务</text>
+      </view>
+
       <view class="form-item">
         <text class="label">计划日期</text>
         <picker mode="date" :value="form.date" :start="minDate" :end="maxDate" @change="onDateChange">
@@ -44,10 +68,11 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { request } from '@/utils/request.js'
 import { useLoggedIn } from '@/utils/auth.js'
+import { isFinalAdmin } from '@/utils/permission.js'
 import { formatDateLabel, todayStr } from '@/utils/plan-store.js'
 import { applyThemeUI, getThemeCssVars, themeSignal } from '@/utils/theme.js'
 import { debounceLeading } from '@/utils/debounce.js'
@@ -58,7 +83,32 @@ const SUBMIT_COOLDOWN_MS = 1500
 const loggedIn = useLoggedIn()
 const today = todayStr()
 const submitting = ref(false)
+const permLevel = ref(0)
+const studentKeyword = ref('')
+const students = ref([])
+const assignIndex = ref(0)
 let submitCooldownUntil = 0
+const isAdmin = computed(() => isFinalAdmin(permLevel.value))
+
+const heroDesc = computed(() =>
+  isAdmin.value
+    ? '为自己或其他学员添加今天及以后的学习安排'
+    : '为自己添加今天及以后的学习安排，将出现在对应日期的计划中'
+)
+
+const assignOptions = computed(() => {
+  const self = { id: null, label: '我自己' }
+  const rows = students.value.map((s) => ({
+    id: s.id,
+    label: `${s.nickname || '学员'}${s.phone ? ` · ${s.phone}` : ''}${s.realName ? `（${s.realName}）` : ''}`
+  }))
+  return [self, ...rows]
+})
+
+const assignLabel = computed(() => assignOptions.value[assignIndex.value]?.label || '我自己')
+
+const selectedAssigneeId = computed(() => assignOptions.value[assignIndex.value]?.id ?? null)
+
 const themeVars = computed(() => {
   themeSignal.value
   return getThemeCssVars()
@@ -84,6 +134,46 @@ const dateLabel = computed(() => {
   if (!form.date) return '请选择日期'
   if (form.date === today) return `今天（${formatDateLabel(form.date)}）`
   return formatDateLabel(form.date)
+})
+
+function onAssignChange(e) {
+  assignIndex.value = Number(e.detail.value) || 0
+}
+
+async function loadProfile() {
+  if (!loggedIn.value) {
+    permLevel.value = 0
+    return
+  }
+  try {
+    const data = await request({ url: '/auth/me', showError: false })
+    permLevel.value = data?.permLevel ?? 0
+  } catch (_) {
+    permLevel.value = 0
+  }
+}
+
+async function loadStudents() {
+  if (!isAdmin.value) return
+  try {
+    const qs = studentKeyword.value.trim()
+      ? `?keyword=${encodeURIComponent(studentKeyword.value.trim())}&pageSize=30`
+      : '?pageSize=30'
+    const data = await request({ url: `/auth/students${qs}`, showError: false })
+    students.value = data?.list || []
+    if (assignIndex.value >= assignOptions.value.length) {
+      assignIndex.value = 0
+    }
+  } catch (e) {
+    students.value = []
+  }
+}
+
+let searchTimer = null
+watch(studentKeyword, () => {
+  if (!isAdmin.value) return
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(loadStudents, 400)
 })
 
 function onDateChange(e) {
@@ -119,19 +209,25 @@ async function submitCore() {
 
   submitting.value = true
   try {
+    const payload = {
+      date: form.date,
+      subject: form.subject.trim(),
+      content: form.content.trim(),
+      targetMinutes: 0
+    }
+    if (isAdmin.value && selectedAssigneeId.value != null) {
+      payload.userId = selectedAssigneeId.value
+    }
     await request({
       url: '/plans/items',
       method: 'POST',
-      data: {
-        date: form.date,
-        subject: form.subject.trim(),
-        content: form.content.trim(),
-        targetMinutes: 0
-      }
+      data: payload
     })
     submitCooldownUntil = Date.now() + SUBMIT_COOLDOWN_MS
     uni.setStorageSync(PREFILL_KEY, form.date)
-    uni.showToast({ title: '已添加', icon: 'success' })
+    const tip =
+      isAdmin.value && selectedAssigneeId.value != null ? '已为学员添加' : '已添加'
+    uni.showToast({ title: tip, icon: 'success' })
     setTimeout(goBack, 500)
   } catch (e) {
     console.warn(e)
@@ -147,8 +243,12 @@ onLoad((query) => {
   }
 })
 
-onShow(() => {
+onShow(async () => {
   applyThemeUI('新增学习任务')
+  await loadProfile()
+  if (isAdmin.value) {
+    await loadStudents()
+  }
 })
 </script>
 
@@ -239,6 +339,18 @@ onShow(() => {
 .date-arrow {
   font-size: 36rpx;
   color: #9ca3af;
+}
+
+.search-input {
+  margin-top: 12rpx;
+}
+
+.assign-pick {
+  margin-top: 16rpx;
+}
+
+.admin-block {
+  padding-bottom: 8rpx;
 }
 
 .input {

@@ -37,7 +37,7 @@
         <view class="tool-icon charger">⚡</view>
         <view class="tool-body">
           <text class="tool-name">充电桩蓝牙调试</text>
-          <text class="tool-desc">蓝牙连接与参数调试</text>
+          <text class="tool-desc">蓝牙连接、设备信息与运维调试</text>
         </view>
         <view v-if="!toolboxOk" class="lock-tag">L3+</view>
         <text v-else class="arrow">›</text>
@@ -71,6 +71,7 @@ import {
   requireToolbox
 } from '@/utils/permission.js'
 import { applyThemeUI, getThemeCssVars, themeSignal } from '@/utils/theme.js'
+import { openChargerPage } from '@/utils/charger-routes.js'
 
 const permLevel = ref(0)
 const toolboxOk = ref(false)
@@ -99,7 +100,7 @@ function goQrcode() {
 
 function goCharger() {
   if (!requireToolbox(permLevel.value)) return
-  uni.navigateTo({ url: '/pages/toolbox/charger-bluetooth/charger-bluetooth' })
+  openChargerPage('menu')
 }
 
 function goOps() {

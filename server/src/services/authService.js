@@ -1,7 +1,11 @@
+const bcrypt = require('bcryptjs')
 const db = require('../db')
 const { sign } = require('../utils/jwt')
 const { code2Session } = require('./wechat')
 const config = require('../config')
+
+const PASSWORD_MIN = 6
+const PASSWORD_MAX = 64
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -24,7 +28,8 @@ function mapUser(row) {
     emailNotifyWhenDone: Boolean(row.email_notify_when_done),
     permLevel: Number(row.perm_level) || 0,
     role: row.role,
-    status: row.status
+    status: row.status,
+    hasPassword: Boolean(row.password_hash)
   }
 }
 
@@ -44,6 +49,20 @@ function validateNickname(nickname) {
     throw err
   }
   return name
+}
+
+function validatePassword(password) {
+  const pwd = String(password || '')
+  if (pwd.length < PASSWORD_MIN || pwd.length > PASSWORD_MAX) {
+    const err = new Error(`密码长度为 ${PASSWORD_MIN}～${PASSWORD_MAX} 个字符`)
+    err.code = 10001
+    throw err
+  }
+  return pwd
+}
+
+function hashPassword(password) {
+  return bcrypt.hashSync(password, 10)
 }
 
 function validateEmail(email, { required = false } = {}) {
@@ -284,4 +303,187 @@ async function updateEmailSettings(userId, body) {
   return mapUser(updated)
 }
 
-module.exports = { wxLogin, wxRegister, updateProfile, updateEmailSettings, mapUser }
+/**
+ * 手机号 + 密码登录（App 等，openid 可为空）
+ */
+async function phoneLogin(body) {
+  const phone = String(body.phone || body.mobile || '').trim()
+  validatePhone(phone)
+  const password = validatePassword(body.password)
+
+  const user = await db.get(
+    `SELECT * FROM users WHERE phone = ? AND role = 'student' LIMIT 1`,
+    [phone]
+  )
+  if (!user) {
+    const err = new Error('手机号或密码错误')
+    err.code = 20001
+    throw err
+  }
+  if (!user.password_hash) {
+    const err = new Error('该账号未设置密码，请在 App「设置密码」后再登录')
+    err.code = 30009
+    throw err
+  }
+  if (user.status !== 'active') {
+    const err = new Error('账号已禁用')
+    err.code = 30002
+    throw err
+  }
+  if (!bcrypt.compareSync(password, user.password_hash)) {
+    const err = new Error('手机号或密码错误')
+    err.code = 20001
+    throw err
+  }
+
+  return issueToken(user)
+}
+
+/**
+ * 手机号 + 密码注册（App，无需微信 code）
+ */
+async function phoneRegister(body) {
+  if (!config.allowSelfRegister) {
+    const err = new Error('暂未开放自助注册，请联系管理员')
+    err.code = 30007
+    throw err
+  }
+
+  const nickname = validateNickname(body.nickname)
+  const phone = String(body.phone || body.mobile || '').trim()
+  validatePhone(phone)
+  const password = validatePassword(body.password)
+  const realName = String(body.realName || body.real_name || '').trim().slice(0, 50)
+
+  const phoneUsed = await db.get(
+    `SELECT id FROM users WHERE phone = ? AND role = 'student' LIMIT 1`,
+    [phone]
+  )
+  if (phoneUsed) {
+    const err = new Error('该手机号已被注册')
+    err.code = 30006
+    throw err
+  }
+
+  const passwordHash = hashPassword(password)
+
+  try {
+    const result = await db.run(
+      `INSERT INTO users (openid, nickname, real_name, phone, password_hash, role, status)
+       VALUES (NULL, ?, ?, ?, ?, 'student', 'active')`,
+      [nickname, realName, phone, passwordHash]
+    )
+    const user = await db.get('SELECT * FROM users WHERE id = ?', [result.insertId])
+    return issueToken(user)
+  } catch (e) {
+    if (e.code === 'ER_DUP_ENTRY' && String(e.message).includes('phone')) {
+      const err = new Error('该手机号已被注册')
+      err.code = 30006
+      throw err
+    }
+    throw e
+  }
+}
+
+/**
+ * 首次设置密码（微信小程序注册、尚未设置 password_hash 的账号）
+ * 需验证注册手机号 + 昵称，防止误绑他人账号
+ */
+async function setInitialPassword(body) {
+  const phone = String(body.phone || body.mobile || '').trim()
+  validatePhone(phone)
+  const password = validatePassword(body.password)
+  const nickname = validateNickname(body.nickname)
+
+  const user = await db.get(
+    `SELECT * FROM users WHERE phone = ? AND role = 'student' LIMIT 1`,
+    [phone]
+  )
+  if (!user) {
+    const err = new Error('未找到该手机号对应的账号')
+    err.code = 30004
+    throw err
+  }
+  if (user.status !== 'active') {
+    const err = new Error('账号已禁用')
+    err.code = 30002
+    throw err
+  }
+  if (user.password_hash) {
+    const err = new Error('该账号已设置密码，请直接登录或在「我的」中修改密码')
+    err.code = 30010
+    throw err
+  }
+  if (String(user.nickname || '').trim() !== nickname) {
+    const err = new Error('昵称与注册信息不一致，请填写小程序注册时的昵称')
+    err.code = 30011
+    throw err
+  }
+
+  const passwordHash = hashPassword(password)
+  await db.run(
+    `UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?`,
+    [passwordHash, user.id]
+  )
+
+  const updated = await db.get('SELECT * FROM users WHERE id = ?', [user.id])
+  return issueToken(updated)
+}
+
+/**
+ * 已登录用户修改密码
+ */
+async function changePassword(userId, body) {
+  const user = await db.get('SELECT * FROM users WHERE id = ?', [userId])
+  if (!user) {
+    const err = new Error('用户不存在')
+    err.code = 30004
+    throw err
+  }
+  if (user.role !== 'student') {
+    const err = new Error('无权操作')
+    err.code = 30003
+    throw err
+  }
+
+  const newPassword = validatePassword(body.newPassword ?? body.password)
+  const oldPassword = String(body.oldPassword ?? body.old_password ?? '')
+
+  if (user.password_hash) {
+    if (!oldPassword) {
+      const err = new Error('请输入原密码')
+      err.code = 10001
+      throw err
+    }
+    if (!bcrypt.compareSync(oldPassword, user.password_hash)) {
+      const err = new Error('原密码不正确')
+      err.code = 20001
+      throw err
+    }
+    if (bcrypt.compareSync(newPassword, user.password_hash)) {
+      const err = new Error('新密码不能与原密码相同')
+      err.code = 10001
+      throw err
+    }
+  }
+
+  const passwordHash = hashPassword(newPassword)
+  await db.run(
+    `UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?`,
+    [passwordHash, userId]
+  )
+
+  return { ok: true }
+}
+
+module.exports = {
+  wxLogin,
+  wxRegister,
+  phoneLogin,
+  phoneRegister,
+  setInitialPassword,
+  changePassword,
+  updateProfile,
+  updateEmailSettings,
+  mapUser
+}

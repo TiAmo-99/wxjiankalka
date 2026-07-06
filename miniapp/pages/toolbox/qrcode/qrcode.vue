@@ -22,6 +22,7 @@
 
     <view v-else class="card">
       <text class="card-title">生成二维码</text>
+      <text class="card-hint">由服务端生成，小程序与 App 通用</text>
       <textarea
         v-model="genText"
         class="textarea"
@@ -32,11 +33,13 @@
       <text class="char-count">{{ genText.length }} / 500</text>
       <button class="btn-primary" :loading="genLoading" @click="generateQr">生成</button>
 
-      <view class="qr-wrap" :class="{ 'qr-wrap--hidden': !qrCanvasMounted }">
-        <canvas
-          canvas-id="opsQrCanvas"
-          class="qr-canvas"
+      <view v-if="qrImageSrc" class="qr-wrap">
+        <image
+          class="qr-image"
+          :src="qrImageSrc"
+          mode="aspectFit"
           :style="{ width: qrSize + 'px', height: qrSize + 'px' }"
+          show-menu-by-longpress
         />
       </view>
       <view v-if="qrReady" class="qr-actions">
@@ -50,9 +53,10 @@
 </template>
 
 <script setup>
-import { computed, nextTick, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
-import { canvasToImage, drawQrToCanvas } from '@/utils/qr-canvas.js'
+import { request } from '@/utils/request.js'
+import { resolveQrImageSrc } from '@/utils/qr-image.js'
 import { applyThemeUI, getThemeCssVars, themeSignal } from '@/utils/theme.js'
 
 const tab = ref('scan')
@@ -60,7 +64,7 @@ const scanResult = ref('')
 const genText = ref('')
 const genLoading = ref(false)
 const qrReady = ref(false)
-const qrCanvasMounted = ref(false)
+const qrImageSrc = ref('')
 const qrSize = 280
 
 const themeVars = computed(() => {
@@ -93,15 +97,18 @@ async function generateQr() {
   }
   genLoading.value = true
   qrReady.value = false
-  qrCanvasMounted.value = true
+  qrImageSrc.value = ''
   try {
-    await nextTick()
-    await new Promise((r) => setTimeout(r, 80))
-    await drawQrToCanvas('opsQrCanvas', text, qrSize)
+    const data = await request({
+      url: '/tools/qrcode',
+      method: 'POST',
+      data: { text, size: qrSize },
+      showError: false
+    })
+    qrImageSrc.value = await resolveQrImageSrc(data)
     qrReady.value = true
   } catch (e) {
-    qrCanvasMounted.value = false
-    uni.showToast({ icon: 'none', title: e.message || '生成失败' })
+    uni.showToast({ icon: 'none', title: e?.message || '生成失败' })
   } finally {
     genLoading.value = false
   }
@@ -115,23 +122,19 @@ function copyText(text) {
   })
 }
 
-async function saveQrImage() {
-  try {
-    const path = await canvasToImage('opsQrCanvas')
-    uni.saveImageToPhotosAlbum({
-      filePath: path,
-      success: () => uni.showToast({ title: '已保存到相册', icon: 'success' }),
-      fail: () => {
-        uni.showModal({
-          title: '保存失败',
-          content: '请在设置中允许保存到相册后重试',
-          showCancel: false
-        })
-      }
-    })
-  } catch (e) {
-    uni.showToast({ icon: 'none', title: e.message || '导出失败' })
-  }
+function saveQrImage() {
+  if (!qrImageSrc.value) return
+  uni.saveImageToPhotosAlbum({
+    filePath: qrImageSrc.value,
+    success: () => uni.showToast({ title: '已保存到相册', icon: 'success' }),
+    fail: () => {
+      uni.showModal({
+        title: '保存失败',
+        content: '请在设置中允许保存到相册后重试',
+        showCancel: false
+      })
+    }
+  })
 }
 
 onShow(() => {
@@ -272,16 +275,9 @@ onShow(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  &--hidden {
-    position: fixed;
-    left: -9999px;
-    opacity: 0;
-    pointer-events: none;
-  }
 }
 
-.qr-canvas {
+.qr-image {
   width: 280px;
   height: 280px;
   background: #fff;

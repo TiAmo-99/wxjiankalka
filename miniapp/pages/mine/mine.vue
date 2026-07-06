@@ -26,7 +26,7 @@
 
     <view v-if="!loggedIn" class="guest-tip">
       <text class="guest-icon">👋</text>
-      <text>首次使用请先「注册」，已有账号点「登录」</text>
+      <text>{{ guestTip }}</text>
     </view>
 
     <view class="stats-panel">
@@ -113,11 +113,27 @@
           </view>
           <text class="arrow">›</text>
         </view>
+        <view class="menu-item" @click="goSetPassword">
+          <view class="menu-icon bg-teal">🔒</view>
+          <view class="menu-body">
+            <text class="menu-text">{{ hasPassword ? '修改密码' : '设置密码' }}</text>
+            <text class="menu-sub">{{ passwordMenuSub }}</text>
+          </view>
+          <text class="arrow">›</text>
+        </view>
         <view class="menu-item" @click="openThemeSelector">
           <view class="menu-icon bg-pink">🎨</view>
           <view class="menu-body">
             <text class="menu-text">界面风格</text>
             <text class="menu-sub">{{ themeDesc }}</text>
+          </view>
+          <text class="arrow">›</text>
+        </view>
+        <view v-if="isAdminUser" class="menu-item" @click="goMemberTasks">
+          <view class="menu-icon bg-cyan">📋</view>
+          <view class="menu-body">
+            <text class="menu-text">学员任务查看</text>
+            <text class="menu-sub">查看指定成员每日完成情况</text>
           </view>
           <text class="arrow">›</text>
         </view>
@@ -143,48 +159,14 @@
 
     <view class="footer">
       <text>考研学习记录</text>
+      <view class="legal-links">
+        <text class="legal-link" @click="goPrivacy">隐私政策</text>
+        <text class="legal-dot">·</text>
+        <text class="legal-link" @click="goUserAgreement">用户服务协议</text>
+      </view>
     </view>
     <view class="page-bottom" />
   </scroll-view>
-
-  <view v-if="actionSheetOpen" class="sheet-mask" @click="closeProfileActions" />
-  <view class="action-sheet" :class="[{ show: actionSheetOpen }, `theme-${currentThemeName}`]">
-    <view class="sheet-head">
-      <text class="sheet-title">{{ loggedIn ? '账号操作' : '欢迎使用' }}</text>
-      <text class="sheet-close" @click="closeProfileActions">×</text>
-    </view>
-    <view class="sheet-body">
-      <view v-if="loggedIn" class="sheet-item" @click="onSheetProfile">
-        <text class="sheet-item-icon">👤</text>
-        <view class="sheet-item-main">
-          <text class="sheet-item-title">修改信息</text>
-          <text class="sheet-item-desc">编辑昵称、手机号、邮箱等资料</text>
-        </view>
-      </view>
-      <view v-if="loggedIn" class="sheet-item danger" @click="onSheetLogout">
-        <text class="sheet-item-icon">⎋</text>
-        <view class="sheet-item-main">
-          <text class="sheet-item-title">退出登录</text>
-          <text class="sheet-item-desc">退出当前账号并清除本地登录态</text>
-        </view>
-      </view>
-
-      <view v-if="!loggedIn" class="sheet-item" @click="onSheetLogin">
-        <text class="sheet-item-icon">🔐</text>
-        <view class="sheet-item-main">
-          <text class="sheet-item-title">登录</text>
-          <text class="sheet-item-desc">已有账号，直接登录同步数据</text>
-        </view>
-      </view>
-      <view v-if="!loggedIn" class="sheet-item" @click="onSheetRegister">
-        <text class="sheet-item-icon">📝</text>
-        <view class="sheet-item-main">
-          <text class="sheet-item-title">注册</text>
-          <text class="sheet-item-desc">新用户先注册，再开始学习</text>
-        </view>
-      </view>
-    </view>
-  </view>
 </template>
 
 <script setup>
@@ -192,7 +174,9 @@ import { computed, ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { request } from '@/utils/request.js'
 import { logout, wxLogin, useLoggedIn } from '@/utils/auth.js'
+import { usePhoneAuth } from '@/utils/platform.js'
 import { goAddTaskWithAuth } from '@/utils/add-task.js'
+import { openPrivacyPolicy, openUserAgreement } from '@/utils/legal.js'
 import { canUseToolbox, isFinalAdmin, permLabel } from '@/utils/permission.js'
 import {
   listThemes,
@@ -209,7 +193,6 @@ const avatarText = ref('?')
 const loginLoading = ref(false)
 const permLevel = ref(0)
 const hasPendingPerm = ref(false)
-const actionSheetOpen = ref(false)
 const stats = ref({
   totalMinutes: 0,
   completedTasks: 0,
@@ -218,8 +201,20 @@ const stats = ref({
 })
 
 const loggedIn = useLoggedIn()
+const phoneAuth = usePhoneAuth()
 const profileMotto = ref('')
 const themeName = ref(getTheme().name)
+const hasPassword = ref(true)
+
+const guestTip = computed(() =>
+  phoneAuth
+    ? '首次使用请先「注册」，已有账号点卡片选择登录'
+    : '首次使用请先「注册」，已有账号可微信或密码登录'
+)
+const passwordMenuSub = computed(() => {
+  if (hasPassword.value) return '更新账号密码，可用于密码登录'
+  return phoneAuth ? '注册时已设置，可在此修改' : '设置后可使用手机号 + 密码登录'
+})
 
 const loginDesc = computed(() => {
   if (!loggedIn.value) return '登录后同步学习数据'
@@ -231,6 +226,8 @@ const permApplySub = computed(() => {
   if (isFinalAdmin(permLevel.value)) return 'L10 管理员 · 审核他人申请'
   return hasPendingPerm.value ? '申请审核中，点击查看' : '申请更高权限等级'
 })
+
+const isAdminUser = computed(() => isFinalAdmin(permLevel.value))
 
 const toolboxSub = computed(() => {
   const lv = permLevel.value
@@ -271,6 +268,7 @@ async function loadProfile() {
     permLevel.value = 0
     hasPendingPerm.value = false
     profileMotto.value = ''
+    hasPassword.value = true
     return
   }
   try {
@@ -279,6 +277,7 @@ async function loadProfile() {
     avatarText.value = (nickname.value[0] || '学').toUpperCase()
     profileMotto.value = data?.motto || ''
     permLevel.value = data?.permLevel ?? 0
+    hasPassword.value = data?.hasPassword !== false
     if (!profileMotto.value && data?.studyGoal) {
       profileMotto.value = data.studyGoal
     }
@@ -349,6 +348,26 @@ function goRegister() {
   uni.navigateTo({ url: '/pages/register/register' })
 }
 
+function goPrivacy() {
+  openPrivacyPolicy()
+}
+
+function goUserAgreement() {
+  openUserAgreement()
+}
+
+function goPhoneLogin() {
+  uni.navigateTo({ url: '/pages/login/login' })
+}
+
+function goSetPassword() {
+  if (loggedIn.value && hasPassword.value) {
+    uni.navigateTo({ url: '/pages/set-password/set-password?mode=change' })
+    return
+  }
+  uni.navigateTo({ url: '/pages/set-password/set-password' })
+}
+
 function goProfile() {
   uni.navigateTo({ url: '/pages/profile/profile' })
 }
@@ -359,6 +378,10 @@ function goEmailSettings() {
 
 function goPermissionApply() {
   uni.navigateTo({ url: '/pages/permission-apply/permission-apply' })
+}
+
+function goMemberTasks() {
+  uni.navigateTo({ url: '/pages/member-tasks/index' })
 }
 
 function goMemos() {
@@ -410,31 +433,34 @@ function handleLogout() {
 }
 
 function openProfileActions() {
-  actionSheetOpen.value = true
-}
+  if (loggedIn.value) {
+    uni.showActionSheet({
+      itemList: ['修改信息', '退出登录'],
+      success: (res) => {
+        if (res.tapIndex === 0) goProfile()
+        else if (res.tapIndex === 1) handleLogout()
+      }
+    })
+    return
+  }
 
-function closeProfileActions() {
-  actionSheetOpen.value = false
-}
+  const itemList = phoneAuth
+    ? ['账号密码登录', '注册']
+    : ['微信一键登录', '账号密码登录', '注册']
 
-function onSheetProfile() {
-  closeProfileActions()
-  goProfile()
-}
-
-function onSheetLogout() {
-  closeProfileActions()
-  handleLogout()
-}
-
-function onSheetLogin() {
-  closeProfileActions()
-  handleLogin()
-}
-
-function onSheetRegister() {
-  closeProfileActions()
-  goRegister()
+  uni.showActionSheet({
+    itemList,
+    success: (res) => {
+      if (phoneAuth) {
+        if (res.tapIndex === 0) goPhoneLogin()
+        else if (res.tapIndex === 1) goRegister()
+        return
+      }
+      if (res.tapIndex === 0) handleLogin()
+      else if (res.tapIndex === 1) goPhoneLogin()
+      else if (res.tapIndex === 2) goRegister()
+    }
+  })
 }
 
 function goHistory() {
@@ -731,6 +757,10 @@ onShow(() => {
     background: linear-gradient(135deg, #ffe4ef, #ffc8dd);
   }
 
+  &.bg-cyan {
+    background: linear-gradient(135deg, #cffafe, #a5f3fc);
+  }
+
   &.bg-red {
     background: linear-gradient(135deg, #fee2e2, #fecaca);
   }
@@ -774,6 +804,24 @@ onShow(() => {
   flex-shrink: 0;
 }
 
+.legal-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12rpx;
+  gap: 8rpx;
+}
+
+.legal-link {
+  font-size: 22rpx;
+  color: var(--theme-primary);
+}
+
+.legal-dot {
+  font-size: 22rpx;
+  color: var(--theme-text-sub);
+}
+
 .footer {
   text-align: center;
   padding: 24rpx 0 8rpx;
@@ -785,124 +833,14 @@ onShow(() => {
   height: 32rpx;
 }
 
-.sheet-mask {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 110;
-}
-
-.action-sheet {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--theme-card-bg);
-  border-radius: 28rpx 28rpx 0 0;
-  transform: translateY(100%);
-  transition: transform 0.22s ease;
-  z-index: 111;
-  box-shadow: 0 -12rpx 40rpx rgba(15, 23, 42, 0.2);
-}
-
-.action-sheet.show {
-  transform: translateY(0);
-}
-
-.sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 26rpx 28rpx 18rpx;
-  border-bottom: 1rpx solid var(--theme-border-soft);
-}
-
-.sheet-title {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: var(--theme-text-main);
-}
-
-.sheet-close {
-  font-size: 46rpx;
-  line-height: 1;
-  color: var(--theme-text-sub);
-  padding: 0 6rpx;
-}
-
-.sheet-body {
-  padding: 10rpx 20rpx calc(18rpx + env(safe-area-inset-bottom));
-}
-
-.sheet-item {
-  display: flex;
-  align-items: center;
-  gap: 14rpx;
-  padding: 22rpx 16rpx;
-  border-radius: 16rpx;
-  margin-bottom: 10rpx;
-  background: var(--theme-input-bg);
-  border: 1rpx solid var(--theme-border-soft);
-}
-
-.sheet-item.danger .sheet-item-title {
-  color: #ef4444;
-}
-
-.sheet-item-icon {
-  font-size: 34rpx;
-  width: 44rpx;
-  text-align: center;
-}
-
-.sheet-item-main {
-  flex: 1;
-}
-
-.sheet-item-title {
-  display: block;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: var(--theme-text-main);
-}
-
-.sheet-item-desc {
-  display: block;
-  margin-top: 4rpx;
-  font-size: 22rpx;
-  color: var(--theme-text-sub);
-}
-
 /* 女神粉：更柔和的卡片氛围与高光 */
 .page.theme-goddess .profile-card {
   box-shadow: 0 8rpx 28rpx rgba(236, 95, 154, 0.16);
 }
 
-.action-sheet.theme-goddess {
-  box-shadow: 0 -14rpx 44rpx rgba(236, 95, 154, 0.22);
-}
-
-.action-sheet.theme-goddess .sheet-item {
-  background: #fff7fb;
-  border-color: #ffd2e7;
-}
-
-.action-sheet.theme-goddess .sheet-item.danger .sheet-item-title {
-  color: #db2777;
-}
-
 /* 酷夜黑：更清晰分层与冷色高亮 */
 .page.theme-dark .profile-card {
   box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.32);
-}
-
-.action-sheet.theme-dark {
-  box-shadow: 0 -14rpx 44rpx rgba(0, 0, 0, 0.45);
-}
-
-.action-sheet.theme-dark .sheet-item {
-  background: #0f172a;
-  border-color: #1e293b;
 }
 
 /* 女神粉：菜单图标与状态块统一粉系 */

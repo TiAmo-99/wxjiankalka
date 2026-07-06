@@ -10,18 +10,32 @@
     "mp-weixin" : {
         "appid" : "wx7ee2768e43e53c3e",
         "setting" : {
-            "urlCheck" : false,
+            "urlCheck" : true,
             "es6" : true,
             "postcss" : true,
-            "minified" : false,
-            "enhance" : false
+            "minified" : true,
+            "enhance" : true,
+            "ignoreDevUnusedFiles" : false,
+            "ignoreUploadUnusedFiles" : false
         },
         "usingComponents" : true,
         "optimization" : {
-            "subPackages" : true
-        }
+            "subPackages" : false
+        },
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "Android 扫描蓝牙设备需要定位权限（系统要求）"
+            }
+        },
+        "__usePrivacyCheck__" : true
     },
     "uniStatistics" : {
         "enable" : false
+    },
+    "app-plus" : {
+        "modules" : {
+            "Camera" : {},
+            "Bluetooth" : {}
+        }
     }
 }

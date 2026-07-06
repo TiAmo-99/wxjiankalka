@@ -31,6 +31,30 @@
       }
     },
     {
+      "path": "pages/legal/privacy/index",
+      "style": {
+        "navigationBarTitleText": "隐私政策"
+      }
+    },
+    {
+      "path": "pages/legal/user-agreement/index",
+      "style": {
+        "navigationBarTitleText": "用户服务协议"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/set-password/set-password",
+      "style": {
+        "navigationBarTitleText": "设置密码"
+      }
+    },
+    {
       "path": "pages/profile/profile",
       "style": {
         "navigationBarTitleText": "个人资料"
@@ -51,6 +75,12 @@
       }
     },
     {
+      "path": "pages/member-tasks/index",
+      "style": {
+        "navigationBarTitleText": "学员任务查看"
+      }
+    },
+    {
       "path": "pages/toolbox/toolbox",
       "style": {
         "navigationBarTitleText": "工具箱",
@@ -59,9 +89,57 @@
       }
     },
     {
+      "path": "pages/toolbox/charger-menu/charger-menu",
+      "style": {
+        "navigationBarTitleText": "充电桩蓝牙"
+      }
+    },
+    {
       "path": "pages/toolbox/charger-bluetooth/charger-bluetooth",
       "style": {
-        "navigationBarTitleText": "充电桩蓝牙调试"
+        "navigationBarTitleText": "蓝牙连接与收发"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-info/charger-info",
+      "style": {
+        "navigationBarTitleText": "充电桩信息"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-params/params",
+      "style": {
+        "navigationBarTitleText": "参数配置"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-firmware/firmware",
+      "style": {
+        "navigationBarTitleText": "固件升级"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-stub/charger-stub",
+      "style": {
+        "navigationBarTitleText": "功能预留"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-connect/connect",
+      "style": {
+        "navigationBarTitleText": "蓝牙连接"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-monitor/monitor",
+      "style": {
+        "navigationBarTitleText": "充电监控"
+      }
+    },
+    {
+      "path": "pages/toolbox/charger-ble-debug/ble-debug",
+      "style": {
+        "navigationBarTitleText": "蓝牙收发调试"
       }
     },
     {

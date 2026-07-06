@@ -37,7 +37,8 @@ async function main() {
     console.log(`已创建管理员「${username}」`)
   }
 
-  console.log(`请使用以下凭据登录 /admin/#/login：`)
+  const loginUrl = `${config.adminBaseUrl.replace(/\/$/, '')}/login.html`
+  console.log(`请使用以下凭据登录管理后台：${loginUrl}`)
   console.log(`  账号：${username}`)
   console.log(`  密码：${password}`)
 }

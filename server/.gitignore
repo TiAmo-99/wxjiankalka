@@ -3,6 +3,3 @@ data/*.db
 data/*.db-*
 .env
 *.log
-public/admin/*
-!public/admin/.gitkeep
-admin-web/node_modules/

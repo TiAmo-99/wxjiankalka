@@ -137,8 +137,59 @@ function mockRequest(options) {
         })
         return
       }
+      if (url === '/auth/phone-login' && method === 'POST') {
+        const data = options.data || {}
+        if (String(data.phone) === '13800138000' && String(data.password) === '123456') {
+          resolve({
+            token: 'dev-mock-token',
+            nickname: '演示学员',
+            user: { permLevel: 0 }
+          })
+        } else {
+          resolve({ code: 20001, message: '手机号或密码错误（演示：13800138000 / 123456）' })
+        }
+        return
+      }
+      if (url === '/auth/phone-register' && method === 'POST') {
+        resolve({
+          token: 'dev-mock-token',
+          nickname: options.data?.nickname || '新学员',
+          user: { permLevel: 0 }
+        })
+        return
+      }
+      if (url === '/auth/set-initial-password' && method === 'POST') {
+        resolve({
+          token: 'dev-mock-token',
+          nickname: options.data?.nickname || '演示学员',
+          user: { permLevel: 0, hasPassword: true }
+        })
+        return
+      }
+      if (url === '/auth/password' && method === 'PATCH') {
+        resolve({ ok: true })
+        return
+      }
+      if (url === '/tools/qrcode' && method === 'POST') {
+        const text = String(options.data?.text || '').trim()
+        if (!text) {
+          resolve({ code: 10001, message: '内容不能为空' })
+          return
+        }
+        // 1x1 透明 PNG，演示用
+        const imageBase64 =
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+        resolve({
+          imageBase64,
+          mimeType: 'image/png',
+          dataUrl: `data:image/png;base64,${imageBase64}`,
+          width: options.data?.size || 280,
+          height: options.data?.size || 280
+        })
+        return
+      }
       if (url === '/me' || url === '/auth/me') {
-        resolve({ nickname: '演示学员' })
+        resolve({ nickname: '演示学员', phone: '13800138000', hasPassword: true })
         return
       }
       if (url === '/stats/summary') {
@@ -383,17 +434,42 @@ function mockRequest(options) {
   })
 }
 
+function normalizeNetworkError(err) {
+  const raw = String(err?.errMsg || err?.message || err || '')
+  if (
+    raw.includes('CONNECTION_CLOSED') ||
+    raw.includes('CONNECTION_RESET') ||
+    raw.includes('ERR_CONNECTION')
+  ) {
+    return '无法连接服务器（连接被中断）。开发者工具请勾选「不校验合法域名」；真机请确认已在公众平台配置 request 合法域名 server.jiankalka.cn'
+  }
+  if (raw.includes('url not in domain list') || raw.includes('不在以下 request 合法域名')) {
+    return '域名未加入小程序 request 合法域名，请在 mp.weixin.qq.com 配置 server.jiankalka.cn'
+  }
+  if (raw.includes('timeout') || raw.includes('TIMEDOUT')) {
+    return '连接服务器超时，请检查网络后重试'
+  }
+  if (raw.includes('fail ssl') || raw.includes('certificate')) {
+    return 'HTTPS 证书校验失败，请检查服务器 SSL 配置'
+  }
+  return raw || '无法连接服务器，请检查网络与小程序合法域名'
+}
+
 function doUniRequest(options) {
   const token = getToken()
   const hadToken = !!token
   const showError = options.showError !== false
-  const isAuthApi = /^\/auth\/(wx-login|wx-register)/.test(options.url || '')
+  const isAuthApi = /^\/auth\/(wx-login|wx-register|phone-login|phone-register|set-initial-password)/.test(
+    options.url || ''
+  )
+  const timeout = options.timeout ?? 20000
 
   return new Promise((resolve, reject) => {
     uni.request({
       url: options.url.startsWith('http') ? options.url : `${config.baseUrl}${options.url}`,
       method: options.method || 'GET',
       data: options.data || {},
+      timeout,
       header: {
         'Content-Type': 'application/json',
         Authorization: token ? `Bearer ${token}` : '',
@@ -447,14 +523,24 @@ function doUniRequest(options) {
         reject({ code: res.statusCode || 50000, message: httpMsg })
       },
       fail(err) {
-        const msg =
-          err?.errMsg ||
-          err?.message ||
-          '无法连接服务器，请检查网络与小程序合法域名'
-        reject({ code: 10002, message: msg, network: true })
+        const msg = normalizeNetworkError(err)
+        reject({ code: 10002, message: msg, network: true, raw: err?.errMsg || err?.message })
       }
     })
   })
+}
+
+/**
+ * 探测 API 是否可达（首页等避免并发打满无效请求）
+ */
+export async function checkApiReachable() {
+  if (config.useMock) return true
+  try {
+    await doUniRequest({ url: '/health', showError: false, timeout: 10000 })
+    return true
+  } catch (_) {
+    return false
+  }
 }
 
 /**

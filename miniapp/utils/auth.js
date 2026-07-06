@@ -96,6 +96,68 @@ export async function wxRegister(form) {
   return applyAuthResult(data, '注册')
 }
 
+/**
+ * 手机号 + 密码登录（App 等）
+ */
+export async function phoneLogin(form) {
+  const data = await request({
+    url: '/auth/phone-login',
+    method: 'POST',
+    data: {
+      phone: String(form.phone || '').trim(),
+      password: form.password
+    },
+    showError: false
+  })
+  return applyAuthResult(data, '登录')
+}
+
+/**
+ * 手机号 + 密码注册（App 等）
+ */
+export async function phoneRegister(form) {
+  const data = await request({
+    url: '/auth/phone-register',
+    method: 'POST',
+    data: {
+      nickname: form.nickname,
+      phone: String(form.phone || '').trim(),
+      password: form.password,
+      realName: form.realName || ''
+    },
+    showError: false
+  })
+  return applyAuthResult(data, '注册')
+}
+
+/** 微信小程序账号首次在 App 设置密码 */
+export async function setInitialPassword(form) {
+  const data = await request({
+    url: '/auth/set-initial-password',
+    method: 'POST',
+    data: {
+      phone: String(form.phone || '').trim(),
+      nickname: String(form.nickname || '').trim(),
+      password: form.password
+    },
+    showError: false
+  })
+  return applyAuthResult(data, '设置密码')
+}
+
+/** 已登录用户修改密码 */
+export async function changePassword(form) {
+  return request({
+    url: '/auth/password',
+    method: 'PATCH',
+    data: {
+      oldPassword: form.oldPassword,
+      newPassword: form.newPassword
+    },
+    showError: false
+  })
+}
+
 export async function updateProfile(form) {
   return request({
     url: '/auth/me',

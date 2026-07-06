@@ -2,6 +2,11 @@
   <theme-page-meta />
   <scroll-view class="page" :style="themeVars" scroll-y>
     <view v-if="useMock" class="mock-banner">演示模式 · 本地示例数据</view>
+    <view v-else-if="apiOffline" class="offline-banner">
+      <text class="offline-title">无法连接服务器</text>
+      <text class="offline-desc">请检查网络；开发者工具请勾选「不校验合法域名」；真机需在公众平台配置 request 域名 server.jiankalka.cn</text>
+      <text class="offline-retry" @tap="retryApi">点击重试</text>
+    </view>
 
     <view class="hero">
       <view class="hero-bg" />
@@ -90,7 +95,7 @@
 import { computed, ref } from 'vue'
 import { onShow, onUnload } from '@dcloudio/uni-app'
 import config from '@/config/index.js'
-import { request } from '@/utils/request.js'
+import { request, checkApiReachable } from '@/utils/request.js'
 import { useLoggedIn } from '@/utils/auth.js'
 import { isPlanItemDone, normalizePlanRow } from '@/utils/plan-store.js'
 import { applyThemeUI, getThemeCssVars, themeSignal } from '@/utils/theme.js'
@@ -99,6 +104,7 @@ import { mockVocabSet } from '@/utils/vocab-mock.js'
 const loggedIn = useLoggedIn()
 
 const useMock = config.useMock
+const apiOffline = ref(false)
 const loading = ref(false)
 const taskList = ref([])
 const userName = ref('考研人')
@@ -346,9 +352,14 @@ onUnload(() => {
   }
 })
 
-onShow(() => {
-  applyThemeUI('今日')
-  startRemainTimer()
+async function loadHomeData() {
+  if (!useMock) {
+    apiOffline.value = !(await checkApiReachable())
+    if (apiOffline.value) return
+  } else {
+    apiOffline.value = false
+  }
+
   if (loggedIn.value) {
     request({ url: '/auth/me', showError: false })
       .then((d) => {
@@ -361,6 +372,16 @@ onShow(() => {
   loadEncouragement()
   loadRandomVocab()
   loadToday()
+}
+
+function retryApi() {
+  loadHomeData()
+}
+
+onShow(() => {
+  applyThemeUI('今日')
+  startRemainTimer()
+  loadHomeData()
 })
 </script>
 
@@ -377,6 +398,37 @@ onShow(() => {
   color: #b88230;
   background: #fff8e6;
   padding: 12rpx;
+}
+
+.offline-banner {
+  margin: 16rpx 28rpx 0;
+  padding: 20rpx 24rpx;
+  background: #fef2f2;
+  border-radius: 16rpx;
+  border: 1rpx solid #fecaca;
+}
+
+.offline-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+.offline-desc {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  line-height: 1.5;
+  color: #991b1b;
+}
+
+.offline-retry {
+  display: inline-block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: var(--theme-primary);
+  font-weight: 600;
 }
 
 .hero {

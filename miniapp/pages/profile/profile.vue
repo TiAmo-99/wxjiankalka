@@ -47,6 +47,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { request } from '@/utils/request.js'
 import { updateProfile, useLoggedIn } from '@/utils/auth.js'
 import { applyThemeUI, getThemeCssVars, themeSignal } from '@/utils/theme.js'
+import { goTabBar } from '@/utils/nav.js'
 
 const loggedIn = useLoggedIn()
 const themeVars = computed(() => {
@@ -67,7 +68,7 @@ const form = ref({
 onLoad(async () => {
   if (!loggedIn.value) {
     uni.showToast({ title: '请先登录', icon: 'none' })
-    setTimeout(() => uni.switchTab({ url: '/pages/mine/mine' }), 400)
+    goTabBar('/pages/mine/mine')
     return
   }
   try {
@@ -98,7 +99,7 @@ async function onSave() {
       motto: form.value.motto.trim()
     })
     uni.showToast({ title: '已保存', icon: 'success' })
-    setTimeout(() => uni.navigateBack(), 400)
+    uni.navigateBack()
   } catch (e) {
     uni.showToast({ title: e?.message || '保存失败', icon: 'none' })
   } finally {

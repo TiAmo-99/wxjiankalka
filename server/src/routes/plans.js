@@ -23,13 +23,20 @@ router.get('/all', async (req, res) => {
 
 router.get('/day', async (req, res) => {
   const date = req.query.date
-  if (!date) return ok(res, { list: [] })
-  const list = await planService.listDay(req.user.id, date)
-  return ok(res, { list })
+  if (!date) return ok(res, { list: [], summary: { total: 0, done: 0, pending: 0 } })
+  const data = await planService.listDayForCaller(
+    req.user.id,
+    req.user.perm_level,
+    date,
+    req.query.userId
+  )
+  return ok(res, data)
 })
 
 router.post('/items', async (req, res) => {
-  const item = await planService.createStudentPlanItem(req.user.id, req.body || {})
+  const item = await planService.createStudentPlanItem(req.user.id, req.body || {}, {
+    permLevel: req.user.perm_level
+  })
   return ok(res, { item })
 })
 

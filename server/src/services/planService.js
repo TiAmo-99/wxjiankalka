@@ -1,5 +1,6 @@
 const db = require('../db')
 const { todayStr, weekRange } = require('../utils/dates')
+const permissionService = require('./permissionService')
 
 function formatDate(val) {
   if (!val) return ''
@@ -78,7 +79,7 @@ function pad(n) {
   return `${n}`.padStart(2, '0')
 }
 
-async function ensureStudentPlanForDate(userId, date) {
+async function ensureStudentPlanForDate(userId, date, createdBy = null) {
   let plan = await db.get(
     `SELECT * FROM study_plans WHERE user_id = ? AND start_date <= ? AND end_date >= ?
      ORDER BY id DESC LIMIT 1`,
@@ -90,17 +91,79 @@ async function ensureStudentPlanForDate(userId, date) {
   const startDate = `${y}-${pad(m)}-01`
   const lastDay = new Date(y, m, 0).getDate()
   const endDate = `${y}-${pad(m)}-${pad(lastDay)}`
+  const creator = createdBy ?? userId
 
   const result = await db.run(
     `INSERT INTO study_plans (user_id, title, start_date, end_date, created_by)
      VALUES (?, ?, ?, ?, ?)`,
-    [userId, `${y}年${m}月学习计划`, startDate, endDate, userId]
+    [userId, `${y}年${m}月学习计划`, startDate, endDate, creator]
   )
   return result.insertId
 }
 
-/** 学员自建任务（今日及以后） */
-async function createStudentPlanItem(userId, body) {
+async function assertStudentExists(userId) {
+  const row = await db.get(
+    `SELECT id, nickname, real_name, phone FROM users WHERE id = ? AND role = 'student' AND status = 'active'`,
+    [userId]
+  )
+  if (!row) {
+    const err = new Error('学员不存在或已停用')
+    err.code = 30004
+    throw err
+  }
+  return {
+    id: row.id,
+    nickname: row.nickname,
+    realName: row.real_name || '',
+    phone: row.phone || ''
+  }
+}
+
+/** L10 可查看其他学员计划；否则仅能查看本人 */
+async function resolveViewUserId(callerId, permLevel, queryUserId) {
+  const targetUserId =
+    queryUserId != null && queryUserId !== '' ? Number(queryUserId) : Number(callerId)
+  if (targetUserId !== Number(callerId)) {
+    if (!permissionService.isFinalAdmin(permLevel)) {
+      const err = new Error('需要 L10 最终管理员权限')
+      err.code = 20003
+      throw err
+    }
+    await assertStudentExists(targetUserId)
+  }
+  return targetUserId
+}
+
+async function listDayForCaller(callerId, permLevel, date, queryUserId) {
+  const userId = await resolveViewUserId(callerId, permLevel, queryUserId)
+  const list = await listDay(userId, date)
+  let student = null
+  if (userId !== Number(callerId)) {
+    student = await assertStudentExists(userId)
+  }
+  const done = list.filter((i) => i.reported).length
+  return {
+    userId,
+    student,
+    list,
+    summary: { total: list.length, done, pending: list.length - done }
+  }
+}
+
+/** 学员自建任务（今日及以后）；L10 可指定 userId 为他人创建 */
+async function createStudentPlanItem(callerId, body, { permLevel } = {}) {
+  const rawTarget = body.userId ?? body.user_id
+  const targetUserId =
+    rawTarget != null && rawTarget !== '' ? Number(rawTarget) : Number(callerId)
+
+  if (targetUserId !== Number(callerId)) {
+    if (!permissionService.isFinalAdmin(permLevel)) {
+      const err = new Error('需要 L10 最终管理员权限')
+      err.code = 20003
+      throw err
+    }
+    await assertStudentExists(targetUserId)
+  }
   const date = formatDate(body.date || todayStr())
   const today = todayStr()
   if (date < today) {
@@ -118,7 +181,11 @@ async function createStudentPlanItem(userId, body) {
   }
 
   const targetMinutes = Math.max(0, Number(body.targetMinutes ?? body.target_minutes ?? 0) || 0)
-  const planId = await ensureStudentPlanForDate(userId, date)
+  const planId = await ensureStudentPlanForDate(
+    targetUserId,
+    date,
+    targetUserId !== Number(callerId) ? callerId : null
+  )
 
   const sortRow = await db.get(
     `SELECT COALESCE(MAX(sort_order), -1) AS max_sort FROM plan_items WHERE plan_id = ? AND date = ?`,
@@ -146,6 +213,7 @@ module.exports = {
   listWeek,
   listAll,
   listDay,
+  listDayForCaller,
   mapItem,
   createStudentPlanItem
 }

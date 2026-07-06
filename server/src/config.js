@@ -1,8 +1,6 @@
 const path = require('path')
 require('dotenv').config({ path: path.join(__dirname, '../.env') })
 
-const root = path.join(__dirname, '..')
-
 module.exports = {
   port: Number(process.env.PORT) || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -21,8 +19,6 @@ module.exports = {
   seedAdminUsername: process.env.SEED_ADMIN_USERNAME || 'admin',
   seedAdminPassword: process.env.SEED_ADMIN_PASSWORD || 'admin123',
   allowSelfRegister: process.env.ALLOW_SELF_REGISTER !== 'false',
-  /** 管理后台静态目录（npm run build:admin 生成） */
-  adminStaticPath: process.env.ADMIN_STATIC_PATH || path.join(root, 'public/admin'),
   smtp: {
     host: process.env.SMTP_HOST || '',
     port: Number(process.env.SMTP_PORT) || 465,
@@ -33,5 +29,6 @@ module.exports = {
   mailFrom: process.env.MAIL_FROM || '',
   /** 学员提交权限申请时通知管理员 */
   permNotifyEmail: process.env.PERM_NOTIFY_EMAIL || 'jiankalka@qq.com',
-  adminBaseUrl: process.env.ADMIN_BASE_URL || 'https://server.jiankalka.cn/admin'
+  /** 网页管理后台根地址（静态页在 www，仅用于邮件/通知链接） */
+  adminBaseUrl: process.env.ADMIN_BASE_URL || 'https://www.jiankalka.cn/manage'
 }

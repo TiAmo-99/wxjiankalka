@@ -13,7 +13,6 @@
     "db:import-phrases": "node scripts/import-phrases.js",
     "admin:reset-password": "node src/db/reset-admin.js",
     "db:reset": "node src/db/migrate.js && node src/db/seed.js",
-    "build:admin": "npm run build --prefix admin-web",
     "job:email-reminder": "node src/jobs/send-email-reminders.js"
   },
   "engines": {
@@ -28,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.16",
+    "qrcode": "^1.5.4",
     "xlsx": "^0.18.5"
   }
 }
